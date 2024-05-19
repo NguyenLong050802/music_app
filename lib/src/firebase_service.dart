@@ -22,6 +22,11 @@ class FireBaseService {
         .doc(song.id).update({'favorite': song.favorite.value});
   }
 
+    Future<void> updateAddedSongToFb(Song song ,String collection ) async {
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(song.id).update({'isAdded': song.isAdded.value});
+  }
 
   Future loadSongFromFb(String collection) async {
     final querySnapshot =

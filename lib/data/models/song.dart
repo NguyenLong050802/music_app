@@ -13,6 +13,7 @@ class Song {
   String image;
   int duration;
   ValueNotifier<bool> favorite;
+  ValueNotifier<bool> isAdded;
   Song({
     required this.id,
     required this.title,
@@ -22,9 +23,8 @@ class Song {
     required this.image,
     required this.duration,
     required bool favorite,
-  }) : favorite = ValueNotifier(favorite);
-
-
+    required bool isAdded,
+  }) : favorite = ValueNotifier(favorite), isAdded = ValueNotifier(isAdded);
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -36,6 +36,7 @@ class Song {
       'image': image,
       'duration': duration,
       'favorite': favorite.value,
+      'isAdded': isAdded.value,
     };
   }
 
@@ -48,43 +49,46 @@ class Song {
       source: map['source'] as String,
       image: map['image'] as String,
       duration: map['duration'] as int,
-      favorite: map['favorite'] as bool,
+      favorite: map['favorite'] as bool,       
+      isAdded: map['isAdded'] as bool,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Song.fromJson(String source) => Song.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Song.fromJson(String source) =>
+      Song.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'Song(id: $id, title: $title, artist: $artist, album: $album, source: $source, image: $image, duration: $duration, favorite: $favorite)';
+    return 'Song(id: $id, title: $title, artist: $artist, album: $album, source: $source, image: $image, duration: $duration, favorite: $favorite, isAdded: $isAdded)';
   }
 
   @override
   bool operator ==(covariant Song other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.title == title &&
-      other.artist == artist &&
-      other.album == album &&
-      other.source == source &&
-      other.image == image &&
-      other.duration == duration &&
-      other.favorite == favorite;
+
+    return other.id == id &&
+        other.title == title &&
+        other.artist == artist &&
+        other.album == album &&
+        other.source == source &&
+        other.image == image &&
+        other.duration == duration &&
+        other.favorite == favorite &&
+        other.isAdded == isAdded;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      title.hashCode ^
-      artist.hashCode ^
-      album.hashCode ^
-      source.hashCode ^
-      image.hashCode ^
-      duration.hashCode ^
-      favorite.hashCode;
+        title.hashCode ^
+        artist.hashCode ^
+        album.hashCode ^
+        source.hashCode ^
+        image.hashCode ^
+        duration.hashCode ^
+        favorite.hashCode ^
+        isAdded.hashCode;
   }
 }

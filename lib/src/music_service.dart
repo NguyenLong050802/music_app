@@ -55,19 +55,19 @@ class MusicService {
                       },
                     ),
                     ValueListenableBuilder(
-                      valueListenable: _viewModles.isAdded,
+                      valueListenable: song.isAdded,
                       builder: (_, value, __) {
                         return MyListTitle(
-                          title: _viewModles.isAdded.value == false
+                          title: song.isAdded.value == false
                               ? 'Add to NowPlaying Songs List'
                               : 'Added to NowPlaying Songs List',
                           onTap: () {
-                            _viewModles.updateNowPlayingListState();
+                            _viewModles.updateNowPlayingListState(song);
                             _viewModles.songToNowPlaying(song);
                             debugPrint(
                                 _viewModles.nowPlayingList.length.toString());
                           },
-                          leading: _viewModles.isAdded.value == false
+                          leading: song.isAdded.value == false
                               ? const Icon(
                                   Icons.playlist_add_rounded,
                                   color: Colors.grey,

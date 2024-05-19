@@ -11,7 +11,6 @@ class MusicAppViewModles extends ChangeNotifier {
   final List<Song> songList = [];
   final List<Song> favoriteList = [];
   final List<Song> nowPlayingList = [];
-  ValueNotifier<bool> isAdded = ValueNotifier(false);
 
   static final _musicViewModel = MusicAppViewModles._internal();
   factory MusicAppViewModles() => _musicViewModel;
@@ -23,7 +22,6 @@ class MusicAppViewModles extends ChangeNotifier {
         notifyListeners();
       }
     });
-
     firebaseService.loadSongFromFb('favoriteSong').then((value) {
       if (value is List<Song>) {
         favoriteList.clear();
@@ -32,13 +30,13 @@ class MusicAppViewModles extends ChangeNotifier {
       }
     });
 
-    // firebaseService.loadSongFromFb('nowPlaying').then((value) {
-    //   if (value is List<Song>) {
-    //     nowPlayingList.clear();
-    //     nowPlayingList.addAll(value);
-    //     notifyListeners();
-    //   }
-    // });
+    firebaseService.loadSongFromFb('nowPlaying').then((value) {
+      if (value is List<Song>) {
+        nowPlayingList.clear();
+        nowPlayingList.addAll(value);
+        notifyListeners();
+      }
+    });
   }
 
   // StreamController<List<Song>> songStream = StreamController();
@@ -67,13 +65,18 @@ class MusicAppViewModles extends ChangeNotifier {
     await firebaseService.updateSongToFb(song, collection);
   }
 
+  Future updateAddedSongValue(Song song, String collection) async {
+    notifyListeners();
+    await firebaseService.updateAddedSongToFb(song, collection);
+  }
+
   void updateFavoriteState(Song song) {
     song.favorite.value = !song.favorite.value;
     notifyListeners();
   }
 
-  void updateNowPlayingListState() {
-    isAdded.value = !isAdded.value;
+  void updateNowPlayingListState(Song song) {
+    song.isAdded.value = !song.isAdded.value;
     notifyListeners();
   }
 
@@ -85,19 +88,39 @@ class MusicAppViewModles extends ChangeNotifier {
     if (song.favorite.value == true) {
       addFavotiteSong(song, favoriteList, 'favoriteSong');
       await updateFavoriteSongValue(song, 'song');
-      await updateFavoriteSongValue(song, 'nowPlaying');
+      for (var a in nowPlayingList) {
+        if (a.id == song.id) {
+          await updateFavoriteSongValue(song, 'nowPlaying');
+        }
+      }
     } else {
       deleteSongsNotFavorite(song, favoriteList, 'favoriteSong');
       await updateFavoriteSongValue(song, 'song');
-      await updateFavoriteSongValue(song, 'nowPlaying');
+      for (var a in nowPlayingList) {
+        if (a.id == song.id) {
+          await updateFavoriteSongValue(song, 'nowPlaying');
+        }
+      }
     }
   }
 
-  void songToNowPlaying(Song song) {
-    if (isAdded.value == true) {
+  Future songToNowPlaying(Song song) async {
+    if (song.isAdded.value == true) {
       addFavotiteSong(song, nowPlayingList, 'nowPlaying');
+      await updateAddedSongValue(song, 'song');
+      for (var a in favoriteList) {
+        if (a.id == song.id) {
+          await updateAddedSongValue(song, 'favoriteSong');
+        }
+      }
     } else {
       deleteSongsNotFavorite(song, nowPlayingList, 'nowPlaying');
+      await updateAddedSongValue(song, 'song');
+      for (var a in favoriteList) {
+        if (a.id == song.id) {
+          await updateAddedSongValue(song, 'favoriteSong');
+        }
+      }
     }
   }
 }
