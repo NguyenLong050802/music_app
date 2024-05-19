@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "706499468665",
+    "project_id": "music-app-flutter-7be8d",
+    "storage_bucket": "music-app-flutter-7be8d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706499468665:android:bcb386a798e307922523a8",
+        "android_client_info": {
+          "package_name": "com.example.music_app_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbQ0T1lQwBudnHlJ3Fjw-AoW4QyvKVMr4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
