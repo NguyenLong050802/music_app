@@ -3,6 +3,7 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:music_app_flutter/src/music_service.dart';
 import 'package:music_app_flutter/ui/custom/custom_icon_buttom.dart';
 import 'package:music_app_flutter/ui/home/view_modles.dart';
 import 'package:music_app_flutter/ui/nowplaying/audio_player_manager.dart';
@@ -30,7 +31,7 @@ class _NowPlayingState extends State<NowPlaying>
   double _currentAnimationPosition = 0.0;
   bool _isShuffle = false;
   late MusicAppViewModles _appViewModles;
-  bool isFavorite = false;
+  late MusicService _musicService;
   @override
   void initState() {
     super.initState();
@@ -41,6 +42,7 @@ class _NowPlayingState extends State<NowPlaying>
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 50000));
     _appViewModles = MusicAppViewModles();
+    _musicService = MusicService();
   }
 
   @override
@@ -61,6 +63,13 @@ class _NowPlayingState extends State<NowPlaying>
         middle: Text(
           'Now Playing',
           style: Theme.of(context).textTheme.titleLarge,
+        ),
+        trailing: MediaIconButton(
+          icon: Icons.more_horiz_rounded,
+          color: Colors.deepPurple,
+          onPressed: () {
+            _musicService.showBottomSheet(context, _song);
+          },
         ),
       ),
       child: Scaffold(
@@ -103,7 +112,7 @@ class _NowPlayingState extends State<NowPlaying>
                     icon: Icons.share_rounded,
                     color: Colors.deepPurple,
                     size: 35,
-                    onPressed: () {},
+                    onPressed: _shareSong,
                   ),
                   Column(
                     children: [
@@ -145,19 +154,23 @@ class _NowPlayingState extends State<NowPlaying>
                       ),
                     ],
                   ),
-                  MediaIconButton(
-                    icon: isFavorite
-                        ? Icons.favorite_rounded
-                        : Icons.favorite_border_rounded,
-                    color: isFavorite ? Colors.red : Colors.deepPurple,
-                    size: 35,
-                    onPressed: () {
-                      // addFavoriteSong(_song);
-                      setState(() {
-                        isFavorite = !isFavorite;
-                      });
-                    },
-                  ),
+                  ValueListenableBuilder<bool?>(
+                      valueListenable: _song.favorite,
+                      builder: (_, value, __) {
+                        return MediaIconButton(
+                          icon: _song.favorite.value == true
+                              ? Icons.favorite_rounded
+                              : Icons.favorite_border_rounded,
+                          color: _song.favorite.value == true
+                              ? Colors.red
+                              : Colors.grey,
+                          size: 35,
+                          onPressed: () async {
+                            _appViewModles.updateFavoriteState(_song);
+                            addFavoriteSong(_song);
+                          },
+                        );
+                      }),
                 ],
               ),
               Padding(
@@ -371,19 +384,23 @@ class _NowPlayingState extends State<NowPlaying>
   void showMessage(String content) {
     var snackBar = SnackBar(
       content: Text(content),
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 1),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  Future _shareSong() async {
+    await _appViewModles.shareSong(_song);
+  }
+
   void addFavoriteSong(Song song) async {
-    if (isFavorite == true) {
-      await _appViewModles.addFavotiteSong(song);
-      await _appViewModles.updateFavoriteSongValue(song, 'true');
-      // showMessage('Added to favorites list successfully');
+    if (song.favorite.value == true) {
+      await _appViewModles.addFavotiteSong(song , _appViewModles.favoriteList , 'favoriteSong');
+      showMessage('Added to favorites list successfully');
     } else {
-      await _appViewModles.deleteSongsNotFavorite(song);
-      // showMessage('Removed to favorites list successfully');
+      await _appViewModles.deleteSongsNotFavorite(song , _appViewModles.favoriteList , 'favoriteSong');
+      showMessage('Removed to favorites list successfully');
     }
+    await _appViewModles.updateFavoriteSongValue(song , 'song');
   }
 }

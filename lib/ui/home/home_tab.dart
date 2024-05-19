@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:music_app_flutter/src/music_service.dart';
+import 'package:music_app_flutter/ui/custom/custom_list_title.dart';
 import 'package:music_app_flutter/ui/home/view_modles.dart';
 
 import '../../data/models/song.dart';
@@ -49,15 +51,17 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  List<Song> songs = [];
-  List<Song> favoriteSongList = [];
+  // List<Song> songs = [];
+  // List<Song> favoriteSongList = [];
   late MusicAppViewModles _viewModles;
+  late MusicService _musicService;
   @override
   void initState() {
     super.initState();
     _viewModles = MusicAppViewModles();
-    _viewModles.loadSong();
-    observeData();
+    _musicService = MusicService();
+    // _viewModles.loadSong();
+    // observeData();
   }
 
   @override
@@ -71,19 +75,22 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  @override
-  void dispose() {
-    _viewModles.songStream.close();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _viewModles.songStream.close();
+  //   super.dispose();
+  // }
 
   Widget getBody() {
-    bool isLoading = songs.isEmpty;
-    if (isLoading) {
-      return getProgessBar();
-    } else {
-      return getListView();
-    }
+    return ListenableBuilder(
+        listenable: _viewModles,
+        builder: (context, _) {
+          if (_viewModles.songList.isNotEmpty) {
+            return getListView();
+          } else {
+            return getProgessBar();
+          }
+        });
   }
 
   Widget getProgessBar() {
@@ -93,43 +100,39 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget getListView() {
-    return ListenableBuilder(
-        listenable: _viewModles,
-        builder: (context, _) {
-          return ListView.separated(
-            itemCount: songs.length,
-            itemBuilder: (context, position) {
-              return getRow(position);
-            },
-            separatorBuilder: (context, index) {
-              return const Divider(
-                thickness: 1,
-                indent: 24,
-                endIndent: 24,
-              );
-            },
-            shrinkWrap: true,
-          );
-        });
+    return ListView.separated(
+      itemCount: _viewModles.songList.length,
+      itemBuilder: (context, position) {
+        return getRow(position);
+      },
+      separatorBuilder: (context, index) {
+        return const Divider(
+          thickness: 1,
+          indent: 24,
+          endIndent: 24,
+        );
+      },
+      shrinkWrap: true,
+    );
   }
 
   Widget getRow(int a) {
-    return _SongSelection(song: songs[a], parent: this);
+    return _SongSelection(song: _viewModles.songList[a], parent: this);
   }
 
-  void observeData() {
-    _viewModles.songStream.stream.listen((event) {
-      setState(() {
-        songs.addAll(event);
-      });
-    });
+  // void observeData() {
+  //   _viewModles.songStream.stream.listen((event) {
+  //     setState(() {
+  //       songs.addAll(event);
+  //     });
+  //   });
 
-  }
+  // }
 
   void navigator(Song song) {
     Navigator.push(context, CupertinoPageRoute(builder: (context) {
       return NowPlaying(
-        songList: songs,
+        songList: _viewModles.songList,
         playingSong: song,
       );
     }));
@@ -148,30 +151,15 @@ class _SongSelection extends StatefulWidget {
 class __SongSelectionState extends State<_SongSelection> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: const EdgeInsets.only(left: 24, right: 8),
-      title: Text(widget.song.title),
-      subtitle: Text(widget.song.artist),
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: FadeInImage.assetNetwork(
-          placeholder: 'assets/itunes.jfif',
-          image: widget.song.image,
-          height: 48,
-          width: 48,
-          imageErrorBuilder: (context, error, stackTrace) {
-            return Image.asset(
-              'assets/itunes.jfif',
-              height: 48,
-              width: 48,
-            );
-          },
-        ),
-      ),
+    return MyListTitle(
+      title: widget.song.title,
+      leading: Leading(image: widget.song.image),
+      subTitle: widget.song.artist,
       trailing: IconButton(
-        icon: const Icon(Icons.more_horiz),
-        onPressed: () {},
-      ),
+          icon: const Icon(Icons.more_horiz),
+          onPressed: () {
+            widget.parent._musicService.showBottomSheet(context, widget.song);
+          }),
       onTap: () {
         widget.parent.navigator(widget.song);
       },

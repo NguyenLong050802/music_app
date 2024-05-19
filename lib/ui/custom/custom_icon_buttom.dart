@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class MediaIconButton extends StatefulWidget {
+class MediaIconButton extends StatelessWidget {
   final IconData icon;
   final Color? color;
   final double? size;
@@ -13,17 +13,12 @@ class MediaIconButton extends StatefulWidget {
       required this.onPressed});
 
   @override
-  State<MediaIconButton> createState() => _MediaIconButtonState();
-}
-
-class _MediaIconButtonState extends State<MediaIconButton> {
-  @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(widget.icon),
-      color: widget.color ?? Theme.of(context).colorScheme.primary,
-      iconSize: widget.size,
-      onPressed: widget.onPressed,
+      icon: Icon(icon),
+      color: color ?? Theme.of(context).colorScheme.primary,
+      iconSize: size,
+      onPressed: onPressed,
     );
   }
 }

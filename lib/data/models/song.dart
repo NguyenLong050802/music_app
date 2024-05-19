@@ -1,16 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-            // "id": "1073969708",
-            // "title": "Right Here Waiting For You",
-            // "album": "Wild Angel's Collection",
-            // "artist": "Richard Marx",
-            // "source": "https://thantrieu.com/resources/music/1073969708.mp3",
-            // "image": "https://thantrieu.com/resources/arts/1073969708.webp",
-            // "duration": 262,
-            // "favorite": "false",
-            // "counter": 0,
-            // "replay": 0
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 class Song {
   String id;
   String title;
@@ -19,7 +12,7 @@ class Song {
   String source;
   String image;
   int duration;
-  String? favorite;
+  ValueNotifier<bool> favorite;
   Song({
     required this.id,
     required this.title,
@@ -28,30 +21,10 @@ class Song {
     required this.source,
     required this.image,
     required this.duration,
-    this.favorite,
-  });
+    required bool favorite,
+  }) : favorite = ValueNotifier(favorite);
 
-  Song copyWith({
-    String? id,
-    String? title,
-    String? artist,
-    String? album,
-    String? source,
-    String? image,
-    int? duration,
-    String? favorite,
-  }) {
-    return Song(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      artist: artist ?? this.artist,
-      album: album ?? this.album,
-      source: source ?? this.source,
-      image: image ?? this.image,
-      duration: duration ?? this.duration,
-      favorite: favorite ?? this.favorite,
-    );
-  }
+
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -62,7 +35,7 @@ class Song {
       'source': source,
       'image': image,
       'duration': duration,
-      'favorite': favorite,
+      'favorite': favorite.value,
     };
   }
 
@@ -75,7 +48,7 @@ class Song {
       source: map['source'] as String,
       image: map['image'] as String,
       duration: map['duration'] as int,
-      favorite: map['favorite'] != null ? map['favorite'] as String : null,
+      favorite: map['favorite'] as bool,
     );
   }
 
