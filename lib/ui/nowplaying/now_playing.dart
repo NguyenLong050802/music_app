@@ -29,7 +29,6 @@ class _NowPlayingState extends State<NowPlaying>
   late Song _song;
   late AnimationController _animationController;
   double _currentAnimationPosition = 0.0;
-  bool _isShuffle = false;
   late MusicAppViewModles _appViewModles;
   late MusicService _musicService;
   @override
@@ -218,12 +217,7 @@ class _NowPlayingState extends State<NowPlaying>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          MediaIconButton(
-            icon: Icons.shuffle,
-            color: _getSuffleIconColor(),
-            size: 35,
-            onPressed: _setSuffleMode,
-          ),
+          _setSuffleMode(),
           MediaIconButton(
             icon: Icons.skip_previous_rounded,
             size: 50,
@@ -302,7 +296,7 @@ class _NowPlayingState extends State<NowPlaying>
   }
 
   void _setNextSong() {
-    if (_isShuffle) {
+    if (_appViewModles.isSuffle.value == true) {
       var random = Random();
       _selectedSongIndex = random.nextInt(widget.songList.length);
     } else {
@@ -320,7 +314,7 @@ class _NowPlayingState extends State<NowPlaying>
   }
 
   void _setPreSong() {
-    if (_isShuffle) {
+    if (_appViewModles.isSuffle.value == true) {
       var random = Random();
       _selectedSongIndex = random.nextInt(widget.songList.length);
     } else {
@@ -337,14 +331,25 @@ class _NowPlayingState extends State<NowPlaying>
     });
   }
 
-  void _setSuffleMode() {
-    setState(() {
-      _isShuffle = !_isShuffle;
-    });
+  Widget _setSuffleMode() {
+    return ValueListenableBuilder<bool?>(
+        valueListenable: _appViewModles.isSuffle,
+        builder: (_, value, __) {
+          return MediaIconButton(
+            icon: Icons.shuffle,
+            size: 35,
+            onPressed: () {
+              _appViewModles.updateSuffleState();
+            },
+            color: _getSuffleIconColor(),
+          );
+        });
   }
 
   Color? _getSuffleIconColor() {
-    return _isShuffle ? Colors.deepPurple : Colors.grey;
+    return _appViewModles.isSuffle.value == true
+        ? Colors.red
+        : Colors.deepPurple;
   }
 
   Widget _showDialog(String title, String content) {
@@ -395,12 +400,14 @@ class _NowPlayingState extends State<NowPlaying>
 
   void addFavoriteSong(Song song) async {
     if (song.favorite.value == true) {
-      await _appViewModles.addFavotiteSong(song , _appViewModles.favoriteList , 'favoriteSong');
+      await _appViewModles.addFavotiteSong(
+          song, _appViewModles.favoriteList, 'favoriteSong');
       showMessage('Added to favorites list successfully');
     } else {
-      await _appViewModles.deleteSongsNotFavorite(song , _appViewModles.favoriteList , 'favoriteSong');
+      await _appViewModles.deleteSongNotFavorite(
+          song, _appViewModles.favoriteList, 'favoriteSong');
       showMessage('Removed to favorites list successfully');
     }
-    await _appViewModles.updateFavoriteSongValue(song , 'song');
+    await _appViewModles.updateFavoriteSongValue(song, 'song');
   }
 }

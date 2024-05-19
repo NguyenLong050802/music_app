@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:music_app_flutter/data/repository/repository.dart';
 import 'package:music_app_flutter/src/firebase_service.dart';
@@ -11,6 +12,8 @@ class MusicAppViewModles extends ChangeNotifier {
   final List<Song> songList = [];
   final List<Song> favoriteList = [];
   final List<Song> nowPlayingList = [];
+
+  ValueNotifier<bool> isSuffle = ValueNotifier(false);
 
   static final _musicViewModel = MusicAppViewModles._internal();
   factory MusicAppViewModles() => _musicViewModel;
@@ -53,7 +56,7 @@ class MusicAppViewModles extends ChangeNotifier {
     await firebaseService.addSongToFb(song, collection);
   }
 
-  Future deleteSongsNotFavorite(
+  Future deleteSongNotFavorite(
       Song song, List<Song> list, String collection) async {
     list.removeWhere((element) => element.id == song.id);
     notifyListeners();
@@ -80,6 +83,11 @@ class MusicAppViewModles extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateSuffleState() {
+    isSuffle.value = !isSuffle.value;
+    notifyListeners();
+  }
+
   Future shareSong(Song song) async {
     await Share.share('This is a great song! ${song.source}');
   }
@@ -94,7 +102,7 @@ class MusicAppViewModles extends ChangeNotifier {
         }
       }
     } else {
-      deleteSongsNotFavorite(song, favoriteList, 'favoriteSong');
+      deleteSongNotFavorite(song, favoriteList, 'favoriteSong');
       await updateFavoriteSongValue(song, 'song');
       for (var a in nowPlayingList) {
         if (a.id == song.id) {
@@ -114,7 +122,7 @@ class MusicAppViewModles extends ChangeNotifier {
         }
       }
     } else {
-      deleteSongsNotFavorite(song, nowPlayingList, 'nowPlaying');
+      deleteSongNotFavorite(song, nowPlayingList, 'nowPlaying');
       await updateAddedSongValue(song, 'song');
       for (var a in favoriteList) {
         if (a.id == song.id) {

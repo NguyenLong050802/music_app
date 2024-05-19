@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:music_app_flutter/ui/home/view_modles.dart';
 
 import '../data/models/song.dart';
-import '../ui/custom/custom_list_title.dart';
+import '../ui/custom/custom_list.dart';
 
 class MusicService {
   final _viewModles = MusicAppViewModles();
@@ -85,5 +85,23 @@ class MusicService {
             ),
           );
         });
+  }
+
+  Widget getBody(List<Song> song, MusicAppViewModles viewModles) {
+    return ListenableBuilder(
+        listenable: viewModles,
+        builder: (context, _) {
+          if (song.isNotEmpty) {
+            return MyListView(songList: song);
+          } else {
+            return getProgessBar();
+          }
+        });
+  }
+
+  Widget getProgessBar() {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
   }
 }
