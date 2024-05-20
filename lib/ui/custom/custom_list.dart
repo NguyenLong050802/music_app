@@ -7,7 +7,7 @@ import '../nowplaying/now_playing.dart';
 
 class MyListView extends StatefulWidget {
   final List<Song> songList;
-  const MyListView({super.key,required this.songList});
+  const MyListView({super.key, required this.songList});
 
   @override
   State<MyListView> createState() => _MyListViewState();
@@ -68,7 +68,7 @@ class __SongSelectionState extends State<_SongSelection> {
   Widget build(BuildContext context) {
     return MyListTitle(
       title: widget.song.title,
-      leading: Leading(image: widget.song.image),
+      leading: Leading(image: widget.song.image, height: 48, width: 48),
       subTitle: widget.song.artist,
       trailing: IconButton(
           icon: const Icon(Icons.more_horiz),
@@ -88,12 +88,14 @@ class MyListTitle extends StatelessWidget {
   final void Function()? onTap;
   final Widget? leading;
   final Widget? trailing;
+  final TextStyle? titleTextStyle;
   const MyListTitle({
     super.key,
     required this.title,
     this.subTitle,
     this.trailing,
     this.leading,
+    this.titleTextStyle,
     required this.onTap,
   });
 
@@ -106,13 +108,20 @@ class MyListTitle extends StatelessWidget {
       onTap: onTap,
       trailing: trailing,
       leading: leading,
+      titleTextStyle: titleTextStyle,
     );
   }
 }
 
 class Leading extends StatelessWidget {
   final String image;
-  const Leading({super.key, required this.image});
+  final double height;
+  final double width;
+  const Leading(
+      {super.key,
+      required this.image,
+      required this.height,
+      required this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -121,15 +130,109 @@ class Leading extends StatelessWidget {
         child: FadeInImage.assetNetwork(
           placeholder: 'assets/itunes.jfif',
           image: image,
-          height: 48,
-          width: 48,
+          height: height,
+          width: width,
           imageErrorBuilder: (context, error, stackTrace) {
             return Image.asset(
               'assets/itunes.jfif',
-              height: 48,
-              width: 48,
+              height: height,
+              width: width,
             );
           },
         ));
+  }
+}
+
+class MyPageView extends StatefulWidget {
+  final MusicService musicService;
+  final MusicAppViewModles viewModles;
+  final List<Song> list;
+  final String image;
+  final String title;
+  const MyPageView(
+      {super.key,
+      required this.musicService,
+      required this.viewModles,
+      required this.list,
+      required this.image,
+      required this.title});
+
+  @override
+  State<MyPageView> createState() => _MyPageViewState();
+}
+
+class _MyPageViewState extends State<MyPageView> {
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Scaffold(
+      appBar: AppBar(),
+      resizeToAvoidBottomInset: false,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.width * 0.6,
+              child: Column(
+                children: [
+                  Center(
+                    child: Leading(
+                        image: widget.image,
+                        height: screenWidth / 2.5,
+                        width: screenWidth / 2.5),
+                  ),
+                  SizedBox(
+                    height: screenWidth * 0.09,
+                    width: screenWidth * 0.8,
+                    child: Center(
+                      child: Text(
+                        widget.title,
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.lightBlue[200]),
+                      minimumSize:
+                          MaterialStateProperty.all(const Size(200, 40)),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => NowPlaying(
+                            songList: widget.list,
+                            playingSong: widget.list[0],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Play All',
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(
+              thickness: 1,
+              indent: 24,
+              endIndent: 24,
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.55,
+                child:
+                    widget.musicService.getBody(widget.list, widget.viewModles),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

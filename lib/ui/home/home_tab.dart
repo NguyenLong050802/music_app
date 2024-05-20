@@ -4,7 +4,7 @@ import 'package:music_app_flutter/src/music_service.dart';
 import 'package:music_app_flutter/ui/home/view_modles.dart';
 import '../../data/models/song.dart';
 import '../library/library_tab.dart';
-import '../profile/profile_tab.dart';
+import '../search/search_tab.dart';
 import '../setting/setting_tab.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -20,7 +20,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _tabs = [
     const HomeTab(),
     const LibraryTab(),
-    const ProfileTab(),
+    const SearchTab(),
     const SettingTab(),
   ];
   @override
@@ -30,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
         tabBar: CupertinoTabBar(iconSize: 35, items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.album), label: 'Library'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Setting'),
         ]),
         tabBuilder: (context, index) {

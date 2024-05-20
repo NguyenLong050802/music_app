@@ -1,5 +1,8 @@
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '../../data/models/song.dart';
 
 class AudioPlayerManager {
   String songUrl;
@@ -19,9 +22,19 @@ class AudioPlayerManager {
     player.setUrl(songUrl);
   }
 
-  void updateUrl(String url) {
-    songUrl = url;
-    init();
+  void setAudioSourcePlay(List<Song> songs, int initialIndex) {
+    final source = ConcatenatingAudioSource(
+      children: songs
+          .map((song) => AudioSource.uri(Uri.parse(song.source),
+              tag: MediaItem(
+                  id: song.id,
+                  title: song.title,
+                  artist: song.artist,
+                  album: song.album,
+                  artUri: Uri.parse(song.image))))
+          .toList(),
+    );
+    player.setAudioSource(source, initialIndex: initialIndex);
   }
 
   void dispose() {

@@ -38,6 +38,7 @@ class _NowPlayingState extends State<NowPlaying>
     _audioPlayerManager = AudioPlayerManager(songUrl: _song.source);
     _selectedSongIndex = widget.songList.indexOf(_song);
     _audioPlayerManager.init();
+    _audioPlayerManager.setAudioSourcePlay(widget.songList, _selectedSongIndex);
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 50000));
     _appViewModles = MusicAppViewModles();
@@ -72,115 +73,121 @@ class _NowPlayingState extends State<NowPlaying>
         ),
       ),
       child: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              SizedBox(height: screenHeight * 0.1),
-              Column(
-                children: [
-                  Text(_song.album,
-                      style: Theme.of(context).textTheme.titleMedium),
-                  const Text('__ ___ _'),
-                ],
-              ),
-              RotationTransition(
-                turns:
-                    Tween(begin: 0.0, end: 1.0).animate(_animationController),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(radius),
-                  child: FadeInImage.assetNetwork(
-                    placeholder: 'assets/itunes.jfif',
-                    image: _song.image,
-                    width: screenWidth - denta,
-                    height: screenWidth - denta,
-                    imageErrorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/itunes.jfif',
-                        height: screenWidth - denta,
-                        width: screenWidth - denta,
-                      );
-                    },
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                SizedBox(height: screenHeight * 0.15),
+                Column(
+                  children: [
+                    Text(_song.album,
+                        style: Theme.of(context).textTheme.titleMedium),
+                    const Text('__ ___ _'),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                RotationTransition(
+                  turns:
+                      Tween(begin: 0.0, end: 1.0).animate(_animationController),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(radius),
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'assets/itunes.jfif',
+                      image: _song.image,
+                      width: screenWidth - denta,
+                      height: screenWidth - denta,
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/itunes.jfif',
+                          height: screenWidth - denta,
+                          width: screenWidth - denta,
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  MediaIconButton(
-                    icon: Icons.share_rounded,
-                    color: Colors.deepPurple,
-                    size: 35,
-                    onPressed: _shareSong,
-                  ),
-                  Column(
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return _showDialog('Title', _song.title);
-                            },
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          maximumSize: Size.fromWidth(screenWidth - 120),
-                        ),
-                        child: Text(
-                          _song.title,
-                          style: Theme.of(context).textTheme.titleMedium!,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return _showDialog('Artist', _song.artist);
-                            },
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          maximumSize: Size.fromWidth(screenWidth - 120),
-                        ),
-                        child: Text(
-                          _song.artist,
-                          style: Theme.of(context).textTheme.titleMedium!,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  ValueListenableBuilder<bool?>(
-                      valueListenable: _song.favorite,
-                      builder: (_, value, __) {
-                        return MediaIconButton(
-                          icon: _song.favorite.value == true
-                              ? Icons.favorite_rounded
-                              : Icons.favorite_border_rounded,
-                          color: _song.favorite.value == true
-                              ? Colors.red
-                              : Colors.grey,
-                          size: 35,
-                          onPressed: () async {
-                            _appViewModles.updateFavoriteState(_song);
-                            addFavoriteSong(_song);
+                const SizedBox(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    MediaIconButton(
+                      icon: Icons.share_rounded,
+                      color: Colors.deepPurple,
+                      size: 35,
+                      onPressed: _shareSong,
+                    ),
+                    Column(
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return _showDialog('Title', _song.title);
+                              },
+                            );
                           },
-                        );
-                      }),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: _progressBar(),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: _mediaButton(),
-              ),
-            ],
+                          style: TextButton.styleFrom(
+                            maximumSize: Size.fromWidth(screenWidth - 120),
+                          ),
+                          child: Text(
+                            _song.title,
+                            style: Theme.of(context).textTheme.titleMedium!,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return _showDialog('Artist', _song.artist);
+                              },
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            maximumSize: Size.fromWidth(screenWidth - 120),
+                          ),
+                          child: Text(
+                            _song.artist,
+                            style: Theme.of(context).textTheme.titleMedium!,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    ValueListenableBuilder<bool?>(
+                        valueListenable: _song.favorite,
+                        builder: (_, value, __) {
+                          return MediaIconButton(
+                            icon: _song.favorite.value == true
+                                ? Icons.favorite_rounded
+                                : Icons.favorite_border_rounded,
+                            color: _song.favorite.value == true
+                                ? Colors.red
+                                : Colors.black,
+                            size: 35,
+                            onPressed: () async {
+                              _appViewModles.updateFavoriteState(_song);
+                              addFavoriteSong(_song);
+                            },
+                          );
+                        }),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: _progressBar(),
+                ),
+                const SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: _mediaButton(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -217,7 +224,7 @@ class _NowPlayingState extends State<NowPlaying>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _setSuffleMode(),
+          _suffleMode(),
           MediaIconButton(
             icon: Icons.skip_previous_rounded,
             size: 50,
@@ -229,11 +236,7 @@ class _NowPlayingState extends State<NowPlaying>
             size: 50,
             onPressed: _setNextSong,
           ),
-          MediaIconButton(
-            icon: Icons.repeat,
-            size: 35,
-            onPressed: () {},
-          ),
+          _loodModeButtom(),
         ],
       ),
     );
@@ -248,7 +251,7 @@ class _NowPlayingState extends State<NowPlaying>
         final playing = playerState?.playing;
         if (processingState == ProcessingState.buffering ||
             processingState == ProcessingState.loading) {
-          _stopAnimation();
+          _pauseAnimation();
           return Container(
             margin: const EdgeInsets.all(8.0),
             width: 58,
@@ -262,6 +265,7 @@ class _NowPlayingState extends State<NowPlaying>
             size: 58,
             onPressed: () {
               _audioPlayerManager.player.play();
+              updateSong();
             },
           );
         } else if (processingState != ProcessingState.completed) {
@@ -285,7 +289,7 @@ class _NowPlayingState extends State<NowPlaying>
             color: Colors.deepPurple,
             size: 58,
             onPressed: () {
-              _audioPlayerManager.player.seek(Duration.zero);
+              _audioPlayerManager.player.seek(Duration.zero, index: 0);
               _resetAnimation();
               _playAnimation();
             },
@@ -306,7 +310,7 @@ class _NowPlayingState extends State<NowPlaying>
       _selectedSongIndex = _selectedSongIndex % widget.songList.length;
     }
     final nextSong = widget.songList[_selectedSongIndex];
-    _audioPlayerManager.updateUrl(nextSong.source);
+    _audioPlayerManager.setAudioSourcePlay(widget.songList, _selectedSongIndex);
     _resetAnimation();
     setState(() {
       _song = nextSong;
@@ -324,11 +328,21 @@ class _NowPlayingState extends State<NowPlaying>
       _selectedSongIndex = widget.songList.length - 1;
     }
     final preSong = widget.songList[_selectedSongIndex];
-    _audioPlayerManager.updateUrl(preSong.source);
+    _audioPlayerManager.setAudioSourcePlay(widget.songList, _selectedSongIndex);
     _resetAnimation();
     setState(() {
       _song = preSong;
     });
+  }
+
+  StreamBuilder<bool> _suffleMode() {
+    return StreamBuilder<bool>(
+      stream: _audioPlayerManager.player.shuffleModeEnabledStream,
+      builder: (context, snapshot) {
+        _appViewModles.isSuffle.value = snapshot.data ?? false;
+        return _setSuffleMode();
+      },
+    );
   }
 
   Widget _setSuffleMode() {
@@ -340,6 +354,8 @@ class _NowPlayingState extends State<NowPlaying>
             size: 35,
             onPressed: () {
               _appViewModles.updateSuffleState();
+              _audioPlayerManager.player
+                  .setShuffleModeEnabled(_appViewModles.isSuffle.value);
             },
             color: _getSuffleIconColor(),
           );
@@ -350,6 +366,44 @@ class _NowPlayingState extends State<NowPlaying>
     return _appViewModles.isSuffle.value == true
         ? Colors.red
         : Colors.deepPurple;
+  }
+
+  StreamBuilder<LoopMode> _loodModeButtom() {
+    return StreamBuilder<LoopMode>(
+      stream: _audioPlayerManager.player.loopModeStream,
+      builder: (context, snapshot) {
+        final loopMode = snapshot.data ?? LoopMode.off;
+        const icons = [
+          Icon(Icons.repeat, color: Colors.deepPurple),
+          Icon(Icons.repeat_one, color: Colors.red),
+          Icon(Icons.repeat, color: Colors.red),
+        ];
+        const cycleModes = [
+          LoopMode.off,
+          LoopMode.one,
+          LoopMode.all,
+        ];
+        final index = cycleModes.indexOf(loopMode);
+        return MediaIconButton(
+          icon: icons[index].icon!,
+          size: 35,
+          onPressed: () {
+            _audioPlayerManager.player
+                .setLoopMode(cycleModes[(index + 1) % cycleModes.length]);
+          },
+          color: icons[index].color,
+        );
+      },
+    );
+  }
+
+  void updateSong() {
+    _audioPlayerManager.player.currentIndexStream.listen((index) {
+      setState(() {
+        _selectedSongIndex = index!;
+        _song = widget.songList[_selectedSongIndex];
+      });
+    });
   }
 
   Widget _showDialog(String title, String content) {
@@ -369,7 +423,9 @@ class _NowPlayingState extends State<NowPlaying>
 
   void _playAnimation() {
     _animationController.forward(from: _currentAnimationPosition);
-    _animationController.repeat();
+    _animationController.repeat(
+      period: const Duration(milliseconds: 50000),
+    );
   }
 
   void _stopAnimation() {

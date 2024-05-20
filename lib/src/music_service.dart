@@ -24,7 +24,8 @@ class MusicService {
                     MyListTitle(
                       title: song.title,
                       onTap: () {},
-                      leading: Leading(image: song.image),
+                      leading:
+                          Leading(image: song.image, height: 48, width: 48),
                     ),
                     const Divider(
                       thickness: 1,

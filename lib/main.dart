@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
           titleMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.normal),
           titleSmall: TextStyle(fontSize: 18.0),
           bodyLarge: TextStyle(fontSize: 18.0),
+          labelSmall: TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
         ),
       ),
       home: const MyHomePage(),
