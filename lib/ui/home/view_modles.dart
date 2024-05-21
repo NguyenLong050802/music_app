@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:music_app_flutter/data/repository/repository.dart';
 import 'package:music_app_flutter/src/firebase_service.dart';
@@ -14,6 +13,7 @@ class MusicAppViewModles extends ChangeNotifier {
   final List<Song> nowPlayingList = [];
 
   ValueNotifier<bool> isSuffle = ValueNotifier(false);
+  ValueNotifier<ThemeMode> themeMode = ValueNotifier(ThemeMode.light);
 
   static final _musicViewModel = MusicAppViewModles._internal();
   factory MusicAppViewModles() => _musicViewModel;
@@ -49,6 +49,11 @@ class MusicAppViewModles extends ChangeNotifier {
   //     songStream.add(value!);
   //   });
   // }
+
+  Future<void> updateThemeMode(ThemeMode mode) async {
+  themeMode.value = mode;
+  notifyListeners();
+}
 
   Future addFavotiteSong(Song song, List<Song> list, String collection) async {
     list.add(song);
@@ -131,4 +136,11 @@ class MusicAppViewModles extends ChangeNotifier {
       }
     }
   }
+
+  // void changeThemeMode(ThemeMode mode, bool isDarkMode) {
+  //   isDarkMode
+  //       ? themeMode.value = ThemeMode.dark
+  //       : themeMode.value = ThemeMode.light;
+  //   notifyListeners();
+  // }
 }

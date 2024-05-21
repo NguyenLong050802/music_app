@@ -18,19 +18,24 @@ class _MyListViewState extends State<MyListView> {
   MusicService musicService = MusicService();
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: widget.songList.length,
-      itemBuilder: (context, position) {
-        return getRow(position, widget.songList);
-      },
-      separatorBuilder: (context, index) {
-        return const Divider(
-          thickness: 1,
-          indent: 24,
-          endIndent: 24,
+    return ListenableBuilder(
+      listenable: viewModles,
+      builder: (context, _) {
+        return ListView.separated(
+          itemCount: widget.songList.length,
+          itemBuilder: (context, position) {
+            return getRow(position, widget.songList);
+          },
+          separatorBuilder: (context, index) {
+            return const Divider(
+              thickness: 1,
+              indent: 24,
+              endIndent: 24,
+            );
+          },
+          shrinkWrap: true,
         );
       },
-      shrinkWrap: true,
     );
   }
 

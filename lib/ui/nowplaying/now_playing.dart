@@ -324,7 +324,7 @@ class _NowPlayingState extends State<NowPlaying>
     } else {
       --_selectedSongIndex;
     }
-    if (_selectedSongIndex <= 0) {
+    if (_selectedSongIndex < 0) {
       _selectedSongIndex = widget.songList.length - 1;
     }
     final preSong = widget.songList[_selectedSongIndex];
