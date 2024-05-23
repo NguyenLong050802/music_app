@@ -1,13 +1,19 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:music_app_flutter/firebase_options.dart';
 import 'ui/home/home_tab.dart';
 import 'ui/home/view_modles.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
   );
   runApp(const MyApp());
 }
@@ -20,7 +26,6 @@ class MyApp extends StatelessWidget {
     return ValueListenableBuilder(
         valueListenable: viewModles.themeMode,
         builder: (__, value, _) {
-          debugPrint('themeMode: ${viewModles.themeMode.value}');
           return MaterialApp(
             title: 'Flutter Demo',
             debugShowCheckedModeBanner: false,

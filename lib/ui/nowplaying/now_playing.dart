@@ -3,11 +3,11 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:music_app_flutter/src/music_service.dart';
 import 'package:music_app_flutter/ui/custom/custom_icon_buttom.dart';
 import 'package:music_app_flutter/ui/home/view_modles.dart';
 import 'package:music_app_flutter/ui/nowplaying/audio_player_manager.dart';
 import '../../data/models/song.dart';
+import '../custom/custom_list.dart';
 
 class NowPlaying extends StatefulWidget {
   final List<Song> songList;
@@ -30,7 +30,7 @@ class _NowPlayingState extends State<NowPlaying>
   late AnimationController _animationController;
   double _currentAnimationPosition = 0.0;
   late MusicAppViewModles _appViewModles;
-  late MusicService _musicService;
+
   @override
   void initState() {
     super.initState();
@@ -42,7 +42,6 @@ class _NowPlayingState extends State<NowPlaying>
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 50000));
     _appViewModles = MusicAppViewModles();
-    _musicService = MusicService();
   }
 
   @override
@@ -68,7 +67,7 @@ class _NowPlayingState extends State<NowPlaying>
           icon: Icons.more_horiz_rounded,
           color: Colors.deepPurple,
           onPressed: () {
-            _musicService.showBottomSheet(context, _song);
+            showBottomSheetSong(context,_song,_appViewModles);
           },
         ),
       ),

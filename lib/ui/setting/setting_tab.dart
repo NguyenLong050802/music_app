@@ -14,6 +14,7 @@ class _SettingTabState extends State<SettingTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: const Text('Setting Page'),
         centerTitle: true,

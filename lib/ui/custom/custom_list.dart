@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:music_app_flutter/src/music_service.dart';
 import 'package:music_app_flutter/ui/home/view_modles.dart';
 import '../../data/models/song.dart';
 import '../nowplaying/now_playing.dart';
@@ -15,7 +14,6 @@ class MyListView extends StatefulWidget {
 
 class _MyListViewState extends State<MyListView> {
   MusicAppViewModles viewModles = MusicAppViewModles();
-  MusicService musicService = MusicService();
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
@@ -24,7 +22,7 @@ class _MyListViewState extends State<MyListView> {
         return ListView.separated(
           itemCount: widget.songList.length,
           itemBuilder: (context, position) {
-            return getRow(position, widget.songList);
+            return getRow(position, widget.songList, viewModles);
           },
           separatorBuilder: (context, index) {
             return const Divider(
@@ -38,31 +36,130 @@ class _MyListViewState extends State<MyListView> {
       },
     );
   }
+}
 
-  Widget getRow(int a, List<Song> list) {
-    return _SongSelection(
-      song: list[a],
-      parent: this,
-      list: list,
+Widget getRow(int a, List<Song> list, MusicAppViewModles viewModles) {
+  return _SongSelection(
+    viewModles: viewModles,
+    song: list[a],
+    list: list,
+  );
+}
+
+Widget getBody(List<Song> song, MusicAppViewModles viewModles) {
+  return ListenableBuilder(
+      listenable: viewModles,
+      builder: (context, _) {
+        if (song.isNotEmpty) {
+          return MyListView(songList: song);
+        } else {
+          return getProgessBar();
+        }
+      });
+}
+
+Widget getProgessBar() {
+  return const Center(
+    child: CircularProgressIndicator(),
+  );
+}
+
+void navigator(BuildContext context, Song song, List<Song> list) {
+  Navigator.push(context, CupertinoPageRoute(builder: (context) {
+    return NowPlaying(
+      songList: list,
+      playingSong: song,
     );
-  }
+  }));
+}
 
-  void navigator(Song song, List<Song> list) {
-    Navigator.push(context, CupertinoPageRoute(builder: (context) {
-      return NowPlaying(
-        songList: list,
-        playingSong: song,
-      );
-    }));
-  }
+void showBottomSheetSong(
+    BuildContext context, Song song, MusicAppViewModles viewModles) {
+  showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+          child: Container(
+            height: 400,
+            color: Colors.white,
+            child: SizedBox(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MyListTitle(
+                    title: song.title,
+                    onTap: () {},
+                    leading: Leading(image: song.image, height: 48, width: 48),
+                  ),
+                  const Divider(
+                    thickness: 1,
+                    indent: 24,
+                    endIndent: 24,
+                  ),
+                  ValueListenableBuilder(
+                    valueListenable: song.favorite,
+                    builder: (_, value, __) {
+                      return MyListTitle(
+                        title: song.favorite.value == false
+                            ? 'Add to Favorite Songs List'
+                            : 'Added to Favorite Songs List',
+                        onTap: () {
+                          viewModles.updateFavoriteState(song);
+                          viewModles.songToFavorite(song);
+                        },
+                        leading: song.favorite.value == false
+                            ? const Icon(
+                                Icons.favorite_border_outlined,
+                                color: Colors.grey,
+                              )
+                            : const Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                              ),
+                      );
+                    },
+                  ),
+                  ValueListenableBuilder(
+                    valueListenable: song.isAdded,
+                    builder: (_, value, __) {
+                      return MyListTitle(
+                        title: song.isAdded.value == false
+                            ? 'Add to NowPlaying Songs List'
+                            : 'Added to NowPlaying Songs List',
+                        onTap: () {
+                          viewModles.updateNowPlayingListState(song);
+                          viewModles.songToNowPlaying(song);
+                          debugPrint(
+                              viewModles.nowPlayingList.length.toString());
+                        },
+                        leading: song.isAdded.value == false
+                            ? const Icon(
+                                Icons.playlist_add_rounded,
+                                color: Colors.grey,
+                              )
+                            : const Icon(
+                                Icons.playlist_add_check_rounded,
+                                color: Colors.red,
+                              ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      });
 }
 
 class _SongSelection extends StatefulWidget {
   final Song song;
   final List<Song> list;
-  final _MyListViewState parent;
+  final MusicAppViewModles viewModles;
   const _SongSelection(
-      {required this.song, required this.parent, required this.list});
+      {required this.song, required this.list, required this.viewModles});
 
   @override
   State<_SongSelection> createState() => __SongSelectionState();
@@ -78,10 +175,10 @@ class __SongSelectionState extends State<_SongSelection> {
       trailing: IconButton(
           icon: const Icon(Icons.more_horiz),
           onPressed: () {
-            widget.parent.musicService.showBottomSheet(context, widget.song);
+            showBottomSheetSong(context, widget.song, widget.viewModles);
           }),
       onTap: () {
-        widget.parent.navigator(widget.song, widget.list);
+        navigator(context, widget.song, widget.list);
       },
     );
   }
@@ -137,6 +234,7 @@ class Leading extends StatelessWidget {
           image: image,
           height: height,
           width: width,
+          fit: BoxFit.cover,
           imageErrorBuilder: (context, error, stackTrace) {
             return Image.asset(
               'assets/itunes.jfif',
@@ -149,14 +247,12 @@ class Leading extends StatelessWidget {
 }
 
 class MyPageView extends StatefulWidget {
-  final MusicService musicService;
   final MusicAppViewModles viewModles;
   final List<Song> list;
   final String image;
   final String title;
   const MyPageView(
       {super.key,
-      required this.musicService,
       required this.viewModles,
       required this.list,
       required this.image,
@@ -205,14 +301,7 @@ class _MyPageViewState extends State<MyPageView> {
                           MaterialStateProperty.all(const Size(200, 40)),
                     ),
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => NowPlaying(
-                            songList: widget.list,
-                            playingSong: widget.list[0],
-                          ),
-                        ),
-                      );
+                      navigator(context, widget.list[0], widget.list);
                     },
                     child: Text(
                       'Play All',
@@ -231,8 +320,7 @@ class _MyPageViewState extends State<MyPageView> {
               scrollDirection: Axis.vertical,
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.55,
-                child:
-                    widget.musicService.getBody(widget.list, widget.viewModles),
+                child: getBody(widget.list, widget.viewModles),
               ),
             ),
           ],

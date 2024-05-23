@@ -11,7 +11,8 @@ class MusicAppViewModles extends ChangeNotifier {
   final List<Song> songList = [];
   final List<Song> favoriteList = [];
   final List<Song> nowPlayingList = [];
-
+  ValueNotifier<bool> isListView = ValueNotifier(true);
+  ValueNotifier<bool> isDecrement = ValueNotifier(false);
   ValueNotifier<bool> isSuffle = ValueNotifier(false);
   ValueNotifier<ThemeMode> themeMode = ValueNotifier(ThemeMode.light);
 
@@ -51,9 +52,9 @@ class MusicAppViewModles extends ChangeNotifier {
   // }
 
   Future<void> updateThemeMode(ThemeMode mode) async {
-  themeMode.value = mode;
-  notifyListeners();
-}
+    themeMode.value = mode;
+    notifyListeners();
+  }
 
   Future addFavotiteSong(Song song, List<Song> list, String collection) async {
     list.add(song);
@@ -83,6 +84,11 @@ class MusicAppViewModles extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateListViewState() {
+    isListView.value = !isListView.value;
+    notifyListeners();
+  }
+
   void updateNowPlayingListState(Song song) {
     song.isAdded.value = !song.isAdded.value;
     notifyListeners();
@@ -90,6 +96,20 @@ class MusicAppViewModles extends ChangeNotifier {
 
   void updateSuffleState() {
     isSuffle.value = !isSuffle.value;
+    notifyListeners();
+  }
+
+  void updateSortState() {
+    isDecrement.value = !isDecrement.value;
+    notifyListeners();
+  }
+
+  void updateListView(List<Song> songList) {
+    if (isDecrement.value == true) {
+      songList.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+    } else {
+      songList.sort((a, b) => b.title.toLowerCase().compareTo(a.title.toLowerCase()));
+    }
     notifyListeners();
   }
 

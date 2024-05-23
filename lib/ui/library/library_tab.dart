@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:music_app_flutter/src/music_service.dart';
 import 'package:music_app_flutter/ui/custom/custom_icon_buttom.dart';
 import 'package:music_app_flutter/ui/custom/custom_list.dart';
 import 'package:music_app_flutter/ui/home/view_modles.dart';
+// import '../../data/models/song.dart';
 
 class LibraryTab extends StatefulWidget {
   const LibraryTab({super.key});
@@ -13,12 +13,10 @@ class LibraryTab extends StatefulWidget {
 
 class _LibraryTabState extends State<LibraryTab> {
   late MusicAppViewModles _viewModles;
-  late MusicService _musicService;
 
   @override
   void initState() {
     _viewModles = MusicAppViewModles();
-    _musicService = MusicService();
     super.initState();
   }
 
@@ -63,7 +61,6 @@ class _LibraryTabState extends State<LibraryTab> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return MyPageView(
-                        musicService: _musicService,
                         viewModles: _viewModles,
                         list: _viewModles.favoriteList,
                         image: favoriteSongImage,
@@ -90,7 +87,6 @@ class _LibraryTabState extends State<LibraryTab> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return MyPageView(
-                        musicService: _musicService,
                         viewModles: _viewModles,
                         title: 'NowPlaying Songs List',
                         list: _viewModles.nowPlayingList,
@@ -121,3 +117,11 @@ class _LibraryTabState extends State<LibraryTab> {
     );
   }
 }
+
+// void addNewList(String title) {
+//   final newList = ListSong(
+//     songList: [],
+//     title: title,
+//   );
+//   newList.songList.addAll()
+// }

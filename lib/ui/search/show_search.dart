@@ -1,13 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_app_flutter/data/models/song.dart';
-import 'package:music_app_flutter/src/music_service.dart';
 import 'package:music_app_flutter/ui/custom/custom_list.dart';
+import 'package:music_app_flutter/ui/home/view_modles.dart';
 import '../nowplaying/now_playing.dart';
 
 class ShowSearch extends SearchDelegate {
+  final MusicAppViewModles musicAppViewModles ;
   final List<Song> songList;
-  final MusicService musicService;
-  ShowSearch({required this.songList, required this.musicService});
+  ShowSearch({required this.songList , required this.musicAppViewModles});
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -50,12 +51,12 @@ class ShowSearch extends SearchDelegate {
           trailing: IconButton(
               icon: const Icon(Icons.more_horiz),
               onPressed: () {
-                musicService.showBottomSheet(context, searchResult[index]);
+                showBottomSheetSong(context, searchResult[index],musicAppViewModles);
               }),
           onTap: () {
-            close(context, searchResult[index]);
-            Navigator.of(context).push(
-              MaterialPageRoute(
+            close(context, searchResult[index].title);
+            Navigator.push(context,
+              CupertinoPageRoute(
                 builder: (context) => NowPlaying(
                   songList: songList,
                   playingSong: searchResult[index],
@@ -96,12 +97,12 @@ class ShowSearch extends SearchDelegate {
           trailing: IconButton(
               icon: const Icon(Icons.more_horiz),
               onPressed: () {
-                musicService.showBottomSheet(context, searchResult[index]);
+                showBottomSheetSong(context, searchResult[index],musicAppViewModles);
               }),
           onTap: () {
-            close(context, searchResult[index]);
-            Navigator.of(context).push(
-              MaterialPageRoute(
+            close(context, searchResult[index].title);
+            Navigator.push(context,
+              CupertinoPageRoute(
                 builder: (context) => NowPlaying(
                   songList: songList,
                   playingSong: searchResult[index],

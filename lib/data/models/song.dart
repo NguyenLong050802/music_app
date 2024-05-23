@@ -92,3 +92,13 @@ class Song {
         isAdded.hashCode;
   }
 }
+
+class ListSong {
+  List<Song> songList;
+  String title;
+  ListSong({
+    required this.songList,
+    required this.title,
+  });
+
+}
