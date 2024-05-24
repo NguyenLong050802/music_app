@@ -16,14 +16,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Song> favoriteList = [];
-  List<Song> nowPlayingList = [];
   final List<Widget> _tabs = [
     const HomeTab(),
     const LibraryTab(),
     const SearchTab(),
     const SettingTab(),
   ];
+  // late MusicAppViewModles _viewModles;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _viewModles = MusicAppViewModles();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(

@@ -46,9 +46,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
             themeMode: viewModles.themeMode.value,
-            darkTheme: ThemeData.dark(
-              useMaterial3: true,
-            ),
+            darkTheme: ThemeData.dark(),
             home: const MyHomePage(),
           );
         });

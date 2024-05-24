@@ -51,7 +51,7 @@ class ShowSearch extends SearchDelegate {
           trailing: IconButton(
               icon: const Icon(Icons.more_horiz),
               onPressed: () {
-                showBottomSheetSong(context, searchResult[index],musicAppViewModles);
+                showBottomSheetSong(context, searchResult[index]);
               }),
           onTap: () {
             close(context, searchResult[index].title);
@@ -97,7 +97,7 @@ class ShowSearch extends SearchDelegate {
           trailing: IconButton(
               icon: const Icon(Icons.more_horiz),
               onPressed: () {
-                showBottomSheetSong(context, searchResult[index],musicAppViewModles);
+                showBottomSheetSong(context, searchResult[index]);
               }),
           onTap: () {
             close(context, searchResult[index].title);

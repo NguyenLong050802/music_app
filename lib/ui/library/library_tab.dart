@@ -79,36 +79,6 @@ class _LibraryTabState extends State<LibraryTab> {
                   indent: 24,
                   endIndent: 24,
                 ),
-                MyListTitle(
-                  title: 'NowPlaying Songs',
-                  titleTextStyle: Theme.of(context).textTheme.titleMedium,
-                  subTitle: 'PlayList.   Nguyễn Đức Long',
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return MyPageView(
-                        viewModles: _viewModles,
-                        title: 'NowPlaying Songs List',
-                        list: _viewModles.nowPlayingList,
-                        image: _viewModles.nowPlayingList.isNotEmpty
-                            ? _viewModles.nowPlayingList[0].image
-                            : 'https://th.bing.com/th/id/OIP.zkgqwgX81GSlEeKqbkBEugHaHb?w=153&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
-                      );
-                    }));
-                  },
-                  leading: Leading(
-                    image: _viewModles.nowPlayingList.isNotEmpty
-                        ? _viewModles.nowPlayingList[0].image
-                        : 'https://th.bing.com/th/id/OIP.zkgqwgX81GSlEeKqbkBEugHaHb?w=153&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
-                    height: 50,
-                    width: 50,
-                  ),
-                ),
-                const Divider(
-                  thickness: 1,
-                  indent: 24,
-                  endIndent: 24,
-                ),
               ],
             ),
           ),

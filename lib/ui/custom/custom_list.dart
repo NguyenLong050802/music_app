@@ -4,6 +4,19 @@ import 'package:music_app_flutter/ui/home/view_modles.dart';
 import '../../data/models/song.dart';
 import '../nowplaying/now_playing.dart';
 
+
+Widget getBody(List<Song> song, MusicAppViewModles viewModles) {
+  return ListenableBuilder(
+      listenable: viewModles,
+      builder: (context, _) {
+        if (song.isNotEmpty) {
+          return MyListView(songList: song);
+        } else {
+          return getProgessBar();
+        }
+      });
+}
+
 class MyListView extends StatefulWidget {
   final List<Song> songList;
   const MyListView({super.key, required this.songList});
@@ -40,23 +53,11 @@ class _MyListViewState extends State<MyListView> {
 
 Widget getRow(int a, List<Song> list, MusicAppViewModles viewModles) {
   return _SongSelection(
-    viewModles: viewModles,
     song: list[a],
     list: list,
   );
 }
 
-Widget getBody(List<Song> song, MusicAppViewModles viewModles) {
-  return ListenableBuilder(
-      listenable: viewModles,
-      builder: (context, _) {
-        if (song.isNotEmpty) {
-          return MyListView(songList: song);
-        } else {
-          return getProgessBar();
-        }
-      });
-}
 
 Widget getProgessBar() {
   return const Center(
@@ -73,8 +74,8 @@ void navigator(BuildContext context, Song song, List<Song> list) {
   }));
 }
 
-void showBottomSheetSong(
-    BuildContext context, Song song, MusicAppViewModles viewModles) {
+void showBottomSheetSong(BuildContext context, Song song) {
+  final viewModles = MusicAppViewModles();
   showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -121,31 +122,6 @@ void showBottomSheetSong(
                       );
                     },
                   ),
-                  ValueListenableBuilder(
-                    valueListenable: song.isAdded,
-                    builder: (_, value, __) {
-                      return MyListTitle(
-                        title: song.isAdded.value == false
-                            ? 'Add to NowPlaying Songs List'
-                            : 'Added to NowPlaying Songs List',
-                        onTap: () {
-                          viewModles.updateNowPlayingListState(song);
-                          viewModles.songToNowPlaying(song);
-                          debugPrint(
-                              viewModles.nowPlayingList.length.toString());
-                        },
-                        leading: song.isAdded.value == false
-                            ? const Icon(
-                                Icons.playlist_add_rounded,
-                                color: Colors.grey,
-                              )
-                            : const Icon(
-                                Icons.playlist_add_check_rounded,
-                                color: Colors.red,
-                              ),
-                      );
-                    },
-                  ),
                 ],
               ),
             ),
@@ -157,9 +133,7 @@ void showBottomSheetSong(
 class _SongSelection extends StatefulWidget {
   final Song song;
   final List<Song> list;
-  final MusicAppViewModles viewModles;
-  const _SongSelection(
-      {required this.song, required this.list, required this.viewModles});
+  const _SongSelection({required this.song, required this.list});
 
   @override
   State<_SongSelection> createState() => __SongSelectionState();
@@ -175,7 +149,7 @@ class __SongSelectionState extends State<_SongSelection> {
       trailing: IconButton(
           icon: const Icon(Icons.more_horiz),
           onPressed: () {
-            showBottomSheetSong(context, widget.song, widget.viewModles);
+            showBottomSheetSong(context, widget.song);
           }),
       onTap: () {
         navigator(context, widget.song, widget.list);
@@ -247,14 +221,14 @@ class Leading extends StatelessWidget {
 }
 
 class MyPageView extends StatefulWidget {
-  final MusicAppViewModles viewModles;
   final List<Song> list;
+  final MusicAppViewModles viewModles;
   final String image;
   final String title;
   const MyPageView(
       {super.key,
-      required this.viewModles,
       required this.list,
+      required this.viewModles,
       required this.image,
       required this.title});
 
@@ -268,7 +242,6 @@ class _MyPageViewState extends State<MyPageView> {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(),
-      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 // import 'package:music_app_flutter/data/repository/repository.dart';
 import 'package:music_app_flutter/src/firebase_service.dart';
 import 'package:share_plus/share_plus.dart';
-
 import '../../data/models/song.dart';
 
 class MusicAppViewModles extends ChangeNotifier {
   final firebaseService = FireBaseService();
   final List<Song> songList = [];
   final List<Song> favoriteList = [];
-  final List<Song> nowPlayingList = [];
   ValueNotifier<bool> isListView = ValueNotifier(true);
   ValueNotifier<bool> isDecrement = ValueNotifier(false);
   ValueNotifier<bool> isSuffle = ValueNotifier(false);
@@ -30,14 +28,6 @@ class MusicAppViewModles extends ChangeNotifier {
       if (value is List<Song>) {
         favoriteList.clear();
         favoriteList.addAll(value);
-        notifyListeners();
-      }
-    });
-
-    firebaseService.loadSongFromFb('nowPlaying').then((value) {
-      if (value is List<Song>) {
-        nowPlayingList.clear();
-        nowPlayingList.addAll(value);
         notifyListeners();
       }
     });
@@ -89,11 +79,6 @@ class MusicAppViewModles extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateNowPlayingListState(Song song) {
-    song.isAdded.value = !song.isAdded.value;
-    notifyListeners();
-  }
-
   void updateSuffleState() {
     isSuffle.value = !isSuffle.value;
     notifyListeners();
@@ -106,9 +91,11 @@ class MusicAppViewModles extends ChangeNotifier {
 
   void updateListView(List<Song> songList) {
     if (isDecrement.value == true) {
-      songList.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+      songList.sort(
+          (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
     } else {
-      songList.sort((a, b) => b.title.toLowerCase().compareTo(a.title.toLowerCase()));
+      songList.sort(
+          (a, b) => b.title.toLowerCase().compareTo(a.title.toLowerCase()));
     }
     notifyListeners();
   }
@@ -121,46 +108,10 @@ class MusicAppViewModles extends ChangeNotifier {
     if (song.favorite.value == true) {
       addFavotiteSong(song, favoriteList, 'favoriteSong');
       await updateFavoriteSongValue(song, 'song');
-      for (var a in nowPlayingList) {
-        if (a.id == song.id) {
-          await updateFavoriteSongValue(song, 'nowPlaying');
-        }
-      }
     } else {
       deleteSongNotFavorite(song, favoriteList, 'favoriteSong');
       await updateFavoriteSongValue(song, 'song');
-      for (var a in nowPlayingList) {
-        if (a.id == song.id) {
-          await updateFavoriteSongValue(song, 'nowPlaying');
-        }
-      }
     }
   }
 
-  Future songToNowPlaying(Song song) async {
-    if (song.isAdded.value == true) {
-      addFavotiteSong(song, nowPlayingList, 'nowPlaying');
-      await updateAddedSongValue(song, 'song');
-      for (var a in favoriteList) {
-        if (a.id == song.id) {
-          await updateAddedSongValue(song, 'favoriteSong');
-        }
-      }
-    } else {
-      deleteSongNotFavorite(song, nowPlayingList, 'nowPlaying');
-      await updateAddedSongValue(song, 'song');
-      for (var a in favoriteList) {
-        if (a.id == song.id) {
-          await updateAddedSongValue(song, 'favoriteSong');
-        }
-      }
-    }
-  }
-
-  // void changeThemeMode(ThemeMode mode, bool isDarkMode) {
-  //   isDarkMode
-  //       ? themeMode.value = ThemeMode.dark
-  //       : themeMode.value = ThemeMode.light;
-  //   notifyListeners();
-  // }
 }

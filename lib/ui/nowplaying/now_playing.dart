@@ -59,6 +59,7 @@ class _NowPlayingState extends State<NowPlaying>
     final radius = (screenWidth - denta) / 2;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         middle: Text(
           'Now Playing',
           style: Theme.of(context).textTheme.titleLarge,
@@ -67,7 +68,7 @@ class _NowPlayingState extends State<NowPlaying>
           icon: Icons.more_horiz_rounded,
           color: Colors.deepPurple,
           onPressed: () {
-            showBottomSheetSong(context,_song,_appViewModles);
+            showBottomSheetSong(context, _song);
           },
         ),
       ),
@@ -77,7 +78,7 @@ class _NowPlayingState extends State<NowPlaying>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                SizedBox(height: screenHeight * 0.15),
+                SizedBox(height: screenHeight * 0.08),
                 Column(
                   children: [
                     Text(_song.album,
@@ -165,7 +166,7 @@ class _NowPlayingState extends State<NowPlaying>
                                 : Icons.favorite_border_rounded,
                             color: _song.favorite.value == true
                                 ? Colors.red
-                                : Colors.black,
+                                : Colors.deepPurple,
                             size: 35,
                             onPressed: () async {
                               _appViewModles.updateFavoriteState(_song);
@@ -227,12 +228,14 @@ class _NowPlayingState extends State<NowPlaying>
           MediaIconButton(
             icon: Icons.skip_previous_rounded,
             size: 50,
+            color: Colors.deepPurple,
             onPressed: _setPreSong,
           ),
           _playButton(),
           MediaIconButton(
             icon: Icons.skip_next_rounded,
             size: 50,
+            color: Colors.deepPurple,
             onPressed: _setNextSong,
           ),
           _loodModeButtom(),
