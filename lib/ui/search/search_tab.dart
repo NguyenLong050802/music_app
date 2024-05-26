@@ -19,7 +19,7 @@ class _SearchTabState extends State<SearchTab> {
       appBar: AppBar(
         title: Text(
           'Search Page',
-          style: Theme.of(context).textTheme.titleLarge,
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         centerTitle: true,
       ),

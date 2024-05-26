@@ -27,7 +27,7 @@ class _LibraryTabState extends State<LibraryTab> {
       appBar: AppBar(
         title: Text(
           'Library Page',
-          style: Theme.of(context).textTheme.titleLarge,
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         centerTitle: true,
         actions: [
@@ -77,10 +77,11 @@ class _LibraryTabState extends State<LibraryTab> {
                     width: 50,
                   ),
                 ),
-                const Divider(
+                Divider(
                   thickness: 1,
                   indent: 24,
                   endIndent: 24,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ],
             ),

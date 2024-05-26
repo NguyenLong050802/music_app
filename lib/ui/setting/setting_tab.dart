@@ -18,7 +18,7 @@ class _SettingTabState extends State<SettingTab> {
       appBar: AppBar(
         title: Text(
           'Setting Page',
-          style: Theme.of(context).textTheme.titleLarge,
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         centerTitle: true,
       ),
@@ -29,7 +29,7 @@ class _SettingTabState extends State<SettingTab> {
             builder: (_, value, __) {
               return MyListTitle(
                   title: 'Dark Mode',
-                  titleTextStyle: Theme.of(context).textTheme.titleMedium,
+                  titleTextStyle: Theme.of(context).textTheme.titleLarge,
                   onTap: null,
                   trailing: Switch(
                     activeColor: Theme.of(context).colorScheme.primary,

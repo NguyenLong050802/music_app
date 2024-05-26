@@ -26,32 +26,27 @@ class MyListView extends StatefulWidget {
 }
 
 class _MyListViewState extends State<MyListView> {
-  MusicAppViewModles viewModles = MusicAppViewModles();
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: viewModles,
-      builder: (context, _) {
-        return ListView.separated(
-          itemCount: widget.songList.length,
-          itemBuilder: (context, position) {
-            return getRow(position, widget.songList, viewModles);
-          },
-          separatorBuilder: (context, index) {
-            return const Divider(
-              thickness: 1,
-              indent: 24,
-              endIndent: 24,
-            );
-          },
-          shrinkWrap: true,
+    return ListView.separated(
+      itemCount: widget.songList.length,
+      itemBuilder: (context, position) {
+        return getRow(position, widget.songList);
+      },
+      separatorBuilder: (context, index) {
+        return Divider(
+          thickness: 1,
+          indent: 24,
+          endIndent: 24,
+          color: Theme.of(context).colorScheme.secondary,
         );
       },
+      shrinkWrap: true,
     );
   }
 }
 
-Widget getRow(int a, List<Song> list, MusicAppViewModles viewModles) {
+Widget getRow(int a, List<Song> list) {
   return _SongSelection(
     song: list[a],
     list: list,
@@ -60,8 +55,16 @@ Widget getRow(int a, List<Song> list, MusicAppViewModles viewModles) {
 
 Widget getProgessBar() {
   return const Center(
-    child: CircularProgressIndicator(),
-  );
+      child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      CircularProgressIndicator(),
+      SizedBox(
+        height: 10,
+      ),
+      Text('Your SongList are empty...'),
+    ],
+  ));
 }
 
 void navigator(BuildContext context, Song song, List<Song> list) {
@@ -93,10 +96,11 @@ void showBottomSheetSong(BuildContext context, Song song) {
                     onTap: () {},
                     leading: Leading(image: song.image, height: 55, width: 55),
                   ),
-                  const Divider(
+                  Divider(
                     thickness: 1,
                     indent: 24,
                     endIndent: 24,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   ValueListenableBuilder(
                     valueListenable: song.favorite,
@@ -293,10 +297,11 @@ class _MyPageViewState extends State<MyPageView> {
                 ],
               ),
             ),
-            const Divider(
+            Divider(
               thickness: 1,
               indent: 24,
               endIndent: 24,
+              color: Theme.of(context).colorScheme.secondary,
             ),
             SingleChildScrollView(
               scrollDirection: Axis.vertical,

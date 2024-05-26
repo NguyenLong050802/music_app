@@ -16,17 +16,15 @@ class MusicAppViewModles extends ChangeNotifier {
   static final _musicViewModel = MusicAppViewModles._internal();
   factory MusicAppViewModles() => _musicViewModel;
   MusicAppViewModles._internal() {
-    firebaseService.loadSongFromFb('song').then((value) {
+    loadSong('song', songList);
+    loadSong('favoriteSong', favoriteList);
+  }
+
+  void loadSong(String collection , List<Song> list) {
+    firebaseService.loadSongFromFb(collection).then((value) {
       if (value is List<Song>) {
-        songList.clear();
-        songList.addAll(value);
-        notifyListeners();
-      }
-    });
-    firebaseService.loadSongFromFb('favoriteSong').then((value) {
-      if (value is List<Song>) {
-        favoriteList.clear();
-        favoriteList.addAll(value);
+        list.clear();
+        list.addAll(value);
         notifyListeners();
       }
     });

@@ -1,33 +1,36 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_app_flutter/data/models/song.dart';
+import 'package:music_app_flutter/ui/custom/custom_icon_buttom.dart';
 import 'package:music_app_flutter/ui/custom/custom_list.dart';
 import 'package:music_app_flutter/ui/home/view_modles.dart';
-import '../nowplaying/now_playing.dart';
 
 class ShowSearch extends SearchDelegate {
-  final MusicAppViewModles musicAppViewModles ;
+  final MusicAppViewModles musicAppViewModles;
   final List<Song> songList;
-  ShowSearch({required this.songList , required this.musicAppViewModles});
+  ShowSearch({required this.songList, required this.musicAppViewModles});
+
+  @override
+  String get searchFieldLabel => 'Search songs,artists,....';
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
-      IconButton(
+      MediaIconButton(
+        icon: Icons.clear,
         onPressed: () {
           query = '';
         },
-        icon: const Icon(Icons.clear),
       ),
     ];
   }
 
   @override
   Widget buildLeading(BuildContext context) {
-    return IconButton(
+    return MediaIconButton(
+      icon: Icons.arrow_back,
       onPressed: () {
-        close(context, '');
+        close(context, null);
       },
-      icon: const Icon(Icons.arrow_back),
     );
   }
 
@@ -37,44 +40,7 @@ class ShowSearch extends SearchDelegate {
         .where((element) =>
             element.title.toLowerCase().contains(query.toLowerCase()))
         .toList();
-    return ListView.separated(
-      itemCount: searchResult.length,
-      itemBuilder: (context, index) {
-        return MyListTitle(
-          title: searchResult[index].title,
-          subTitle: searchResult[index].artist,
-          leading: Leading(
-            image: searchResult[index].image,
-            height: 48,
-            width: 48,
-          ),
-          trailing: IconButton(
-              icon: const Icon(Icons.more_horiz),
-              onPressed: () {
-                showBottomSheetSong(context, searchResult[index]);
-              }),
-          onTap: () {
-            close(context, searchResult[index].title);
-            Navigator.push(context,
-              CupertinoPageRoute(
-                builder: (context) => NowPlaying(
-                  songList: songList,
-                  playingSong: searchResult[index],
-                ),
-              ),
-            );
-          },
-        );
-      },
-      separatorBuilder: (context, index) {
-        return const Divider(
-          thickness: 1,
-          indent: 24,
-          endIndent: 24,
-        );
-      },
-      shrinkWrap: true,
-    );
+    return getBody(searchResult, musicAppViewModles);
   }
 
   @override
@@ -83,45 +49,6 @@ class ShowSearch extends SearchDelegate {
         .where((element) =>
             element.title.toLowerCase().contains(query.toLowerCase()))
         .toList();
-    return ListView.separated(
-      itemCount: searchResult.length,
-      itemBuilder: (context, index) {
-        return MyListTitle(
-          title: searchResult[index].title,
-          subTitle: searchResult[index].artist,
-          leading: Leading(
-            image: searchResult[index].image,
-            height: 48,
-            width: 48,
-          ),
-          trailing: IconButton(
-              icon: const Icon(Icons.more_horiz),
-              onPressed: () {
-                showBottomSheetSong(context, searchResult[index]);
-              }),
-          onTap: () {
-            close(context, searchResult[index].title);
-            Navigator.push(context,
-              CupertinoPageRoute(
-                builder: (context) => NowPlaying(
-                  songList: songList,
-                  playingSong: searchResult[index],
-                ),
-              ),
-            );
-          },
-        );
-      },
-      separatorBuilder: (context, index) {
-        return const Divider(
-          thickness: 1,
-          indent: 24,
-          endIndent: 24,
-        );
-      },
-      shrinkWrap: true,
-    );
+    return getBody(searchResult, musicAppViewModles);
   }
-
 }
-

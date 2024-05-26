@@ -43,15 +43,9 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
               fontFamily: 'Century',
               textTheme: const TextTheme(
-                titleLarge: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
-                ),
+                titleLarge: TextStyle(fontSize: 24.0),
                 bodyMedium: TextStyle(fontSize: 18.0),
-                titleMedium: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.normal,
-                ),
+                titleMedium: TextStyle(fontSize: 30.0),
                 titleSmall: TextStyle(fontSize: 20.0),
                 bodyLarge: TextStyle(fontSize: 18.0),
                 labelSmall: TextStyle(
@@ -77,8 +71,7 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Century',
               textTheme: const TextTheme(
                 titleLarge: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 24.0,
                   color: Colors.white,
                 ),
                 bodyMedium: TextStyle(
@@ -86,8 +79,7 @@ class MyApp extends StatelessWidget {
                   color: Colors.white,
                 ),
                 titleMedium: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.normal,
+                  fontSize: 30.0,
                   color: Colors.white,
                 ),
                 titleSmall: TextStyle(

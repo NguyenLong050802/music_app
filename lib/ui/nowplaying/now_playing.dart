@@ -69,7 +69,7 @@ class _NowPlayingState extends State<NowPlaying>
         ),
         middle: Text(
           'Now Playing',
-          style: Theme.of(context).textTheme.titleLarge,
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         trailing: MediaIconButton(
           icon: Icons.more_horiz_rounded,
@@ -80,6 +80,7 @@ class _NowPlayingState extends State<NowPlaying>
         ),
       ),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           child: Center(
             child: Column(
@@ -89,8 +90,8 @@ class _NowPlayingState extends State<NowPlaying>
                 Column(
                   children: [
                     Text(_song.album,
-                        style: Theme.of(context).textTheme.titleMedium),
-                    const Text('__ ___ _'),
+                        style: Theme.of(context).textTheme.titleLarge),
+                    const Text('__ ___ __'),
                   ],
                 ),
                 const SizedBox(height: 30),
@@ -139,7 +140,7 @@ class _NowPlayingState extends State<NowPlaying>
                           ),
                           child: Text(
                             _song.title,
-                            style: Theme.of(context).textTheme.titleMedium!,
+                            style: Theme.of(context).textTheme.titleLarge!,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -157,7 +158,7 @@ class _NowPlayingState extends State<NowPlaying>
                           ),
                           child: Text(
                             _song.artist,
-                            style: Theme.of(context).textTheme.titleMedium!,
+                            style: Theme.of(context).textTheme.titleLarge!,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -450,7 +451,7 @@ class _NowPlayingState extends State<NowPlaying>
 
   void showMessage(String content) {
     var snackBar = SnackBar(
-      content: Text(content),
+      content: Text(content, style: Theme.of(context).textTheme.bodyMedium),
       duration: const Duration(seconds: 1),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

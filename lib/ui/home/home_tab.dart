@@ -63,7 +63,7 @@ class _HomeTabState extends State<HomeTab> {
       appBar: AppBar(
         title: Text(
           'Home Page',
-          style: Theme.of(context).textTheme.titleLarge,
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         centerTitle: true,
       ),
