@@ -17,7 +17,10 @@ class _SearchTabState extends State<SearchTab> {
     final screenWith = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Page'),
+        title: Text(
+          'Search Page',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: true,
@@ -26,31 +29,35 @@ class _SearchTabState extends State<SearchTab> {
   }
 
   Widget showBody(List<Song> songList, double width) {
-    return Column(
-      children: [
-        SizedBox(
-          child: ElevatedButton.icon(
-            onPressed: () {
-              showSearch(
-                  context: context,
-                  delegate: ShowSearch(
-                      songList: _viewModles.songList,
-                      musicAppViewModles: _viewModles));
-            },
-            icon: const Icon(Icons.search),
-            label: const Text('What are you looking for?'),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.lightBlue[100]),
-              textStyle:
-                  MaterialStateProperty.all(const TextStyle(fontSize: 26)),
-              foregroundColor: MaterialStateProperty.all(Colors.black),
-              iconSize: MaterialStateProperty.all(30.0),
-              alignment: Alignment.centerLeft,
-              minimumSize: MaterialStateProperty.all(Size(width, 50)),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          SizedBox(
+            child: ElevatedButton.icon(
+              onPressed: () {
+                showSearch(
+                    context: context,
+                    delegate: ShowSearch(
+                        songList: _viewModles.songList,
+                        musicAppViewModles: _viewModles));
+              },
+              icon: const Icon(Icons.search),
+              label: const Text('Search for songs, artists,...'),
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all(
+                    Theme.of(context).primaryColorLight),
+                textStyle:
+                    WidgetStateProperty.all(const TextStyle(fontSize: 26)),
+                foregroundColor: WidgetStateProperty.all(Colors.black),
+                iconSize: WidgetStateProperty.all(30.0),
+                alignment: Alignment.centerLeft,
+                minimumSize: WidgetStateProperty.all(Size(width, 50)),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

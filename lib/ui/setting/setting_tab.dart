@@ -16,7 +16,10 @@ class _SettingTabState extends State<SettingTab> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: const Text('Setting Page'),
+        title: Text(
+          'Setting Page',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         centerTitle: true,
       ),
       body: Column(
@@ -29,6 +32,7 @@ class _SettingTabState extends State<SettingTab> {
                   titleTextStyle: Theme.of(context).textTheme.titleMedium,
                   onTap: null,
                   trailing: Switch(
+                    activeColor: Theme.of(context).colorScheme.primary,
                     value: _viewModles.themeMode.value == ThemeMode.dark,
                     onChanged: (value) {
                       _viewModles.updateThemeMode(

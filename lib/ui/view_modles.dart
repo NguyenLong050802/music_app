@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+// import 'package:music_app_flutter/data/repository/repository.dart';
 import 'package:music_app_flutter/src/firebase_service.dart';
 import 'package:share_plus/share_plus.dart';
-import '../../data/models/song.dart';
+import '../data/models/song.dart';
 
 class MusicAppViewModles extends ChangeNotifier {
   final firebaseService = FireBaseService();
@@ -31,6 +32,14 @@ class MusicAppViewModles extends ChangeNotifier {
       }
     });
   }
+
+  // StreamController<List<Song>> songStream = StreamController();
+  // void loadSong() {
+  //   final data = DefaultRepositort();
+  //   data.loadData().then((value) {
+  //     songStream.add(value!);
+  //   });
+  // }
 
   Future<void> updateThemeMode(ThemeMode mode) async {
     themeMode.value = mode;
@@ -104,4 +113,5 @@ class MusicAppViewModles extends ChangeNotifier {
       await updateFavoriteSongValue(song, 'song');
     }
   }
+
 }

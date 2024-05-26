@@ -25,13 +25,16 @@ class _LibraryTabState extends State<LibraryTab> {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Library Page'),
+        title: Text(
+          'Library Page',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         centerTitle: true,
         actions: [
           MediaIconButton(
             icon: Icons.add,
             size: 40,
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.secondary,
             onPressed: () {},
           ),
         ],

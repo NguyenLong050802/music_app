@@ -27,26 +27,84 @@ class MyApp extends StatelessWidget {
         valueListenable: viewModles.themeMode,
         builder: (__, value, _) {
           return MaterialApp(
-            title: 'Flutter Demo',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              colorScheme: const ColorScheme(
+                primary: Colors.deepPurple,
+                secondary: Colors.black87,
+                onPrimary: Colors.lightBlue,
+                surface: Colors.white,
+                error: Colors.red,
+                onSecondary: Colors.black,
+                onSurface: Colors.black,
+                onError: Colors.white,
+                brightness: Brightness.light,
+              ),
               useMaterial3: true,
               fontFamily: 'Century',
               textTheme: const TextTheme(
-                titleLarge:
-                    TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+                titleLarge: TextStyle(
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                ),
                 bodyMedium: TextStyle(fontSize: 18.0),
-                titleMedium:
-                    TextStyle(fontSize: 24.0, fontWeight: FontWeight.normal),
-                titleSmall: TextStyle(fontSize: 18.0),
+                titleMedium: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.normal,
+                ),
+                titleSmall: TextStyle(fontSize: 20.0),
                 bodyLarge: TextStyle(fontSize: 18.0),
-                labelSmall:
-                    TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
+                labelSmall: TextStyle(
+                  fontSize: 26.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             themeMode: viewModles.themeMode.value,
-            darkTheme: ThemeData.dark(),
+            darkTheme: ThemeData(
+              colorScheme: const ColorScheme(
+                primary: Colors.lightBlueAccent,
+                secondary: Colors.white70,
+                onPrimary: Colors.lightBlue,
+                surface: Colors.black,
+                error: Colors.red,
+                onSecondary: Colors.white70,
+                onSurface: Colors.black,
+                onError: Colors.white,
+                brightness: Brightness.dark,
+              ),
+              useMaterial3: true,
+              fontFamily: 'Century',
+              textTheme: const TextTheme(
+                titleLarge: TextStyle(
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+                bodyMedium: TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.white,
+                ),
+                titleMedium: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white,
+                ),
+                titleSmall: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.white,
+                ),
+                bodyLarge: TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.white,
+                ),
+                labelSmall: TextStyle(
+                  fontSize: 26.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
             home: const MyHomePage(),
           );
         });

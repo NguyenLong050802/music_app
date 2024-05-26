@@ -22,12 +22,6 @@ class _MyHomePageState extends State<MyHomePage> {
     const SearchTab(),
     const SettingTab(),
   ];
-  // late MusicAppViewModles _viewModles;
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _viewModles = MusicAppViewModles();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -55,23 +49,22 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  // List<Song> songs = [];
-  // List<Song> favoriteSongList = [];
   late MusicAppViewModles _viewModles;
 
   @override
   void initState() {
     super.initState();
     _viewModles = MusicAppViewModles();
-    // _viewModles.loadSong();
-    // observeData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page'),
+        title: Text(
+          'Home Page',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         centerTitle: true,
       ),
       body: Column(
@@ -145,12 +138,6 @@ class _HomeTabState extends State<HomeTab> {
       ),
     );
   }
-
-  // @override
-  // void dispose() {
-  //   _viewModles.songStream.close();
-  //   super.dispose();
-  // }
 }
 
 Widget getGridView(MusicAppViewModles viewModles) {

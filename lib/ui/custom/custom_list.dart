@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:music_app_flutter/ui/custom/custom_icon_buttom.dart';
 import 'package:music_app_flutter/ui/home/view_modles.dart';
 import '../../data/models/song.dart';
 import '../nowplaying/now_playing.dart';
-
 
 Widget getBody(List<Song> song, MusicAppViewModles viewModles) {
   return ListenableBuilder(
@@ -58,7 +58,6 @@ Widget getRow(int a, List<Song> list, MusicAppViewModles viewModles) {
   );
 }
 
-
 Widget getProgessBar() {
   return const Center(
     child: CircularProgressIndicator(),
@@ -83,7 +82,7 @@ void showBottomSheetSong(BuildContext context, Song song) {
           borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
           child: Container(
             height: 400,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             child: SizedBox(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -92,7 +91,7 @@ void showBottomSheetSong(BuildContext context, Song song) {
                   MyListTitle(
                     title: song.title,
                     onTap: () {},
-                    leading: Leading(image: song.image, height: 48, width: 48),
+                    leading: Leading(image: song.image, height: 55, width: 55),
                   ),
                   const Divider(
                     thickness: 1,
@@ -146,8 +145,8 @@ class __SongSelectionState extends State<_SongSelection> {
       title: widget.song.title,
       leading: Leading(image: widget.song.image, height: 48, width: 48),
       subTitle: widget.song.artist,
-      trailing: IconButton(
-          icon: const Icon(Icons.more_horiz),
+      trailing: MediaIconButton(
+          icon: Icons.more_horiz,
           onPressed: () {
             showBottomSheetSong(context, widget.song);
           }),
@@ -179,8 +178,10 @@ class MyListTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 24, right: 8, top: 5),
-      title: Text(title),
-      subtitle: subTitle != null ? Text(subTitle!) : null,
+      title: Text(title, style: Theme.of(context).textTheme.titleSmall),
+      subtitle: subTitle != null
+          ? Text(subTitle!, style: Theme.of(context).textTheme.bodyLarge)
+          : null,
       onTap: onTap,
       trailing: trailing,
       leading: leading,
@@ -241,7 +242,16 @@ class _MyPageViewState extends State<MyPageView> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: MediaIconButton(
+          icon: Icons.arrow_back,
+          size: 40,
+          color: Theme.of(context).colorScheme.secondary,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -268,10 +278,9 @@ class _MyPageViewState extends State<MyPageView> {
                   ),
                   ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.lightBlue[200]),
-                      minimumSize:
-                          MaterialStateProperty.all(const Size(200, 40)),
+                      backgroundColor: WidgetStateProperty.all(
+                          Theme.of(context).primaryColorLight),
+                      minimumSize: WidgetStateProperty.all(const Size(200, 40)),
                     ),
                     onPressed: () {
                       navigator(context, widget.list[0], widget.list);

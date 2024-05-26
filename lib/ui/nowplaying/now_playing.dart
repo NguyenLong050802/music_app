@@ -60,13 +60,20 @@ class _NowPlayingState extends State<NowPlaying>
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        leading: MediaIconButton(
+          icon: Icons.arrow_back_rounded,
+          color: Theme.of(context).colorScheme.secondary,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         middle: Text(
           'Now Playing',
           style: Theme.of(context).textTheme.titleLarge,
         ),
         trailing: MediaIconButton(
           icon: Icons.more_horiz_rounded,
-          color: Colors.deepPurple,
+          color: Theme.of(context).colorScheme.secondary,
           onPressed: () {
             showBottomSheetSong(context, _song);
           },
@@ -113,7 +120,6 @@ class _NowPlayingState extends State<NowPlaying>
                   children: [
                     MediaIconButton(
                       icon: Icons.share_rounded,
-                      color: Colors.deepPurple,
                       size: 35,
                       onPressed: _shareSong,
                     ),
@@ -166,7 +172,7 @@ class _NowPlayingState extends State<NowPlaying>
                                 : Icons.favorite_border_rounded,
                             color: _song.favorite.value == true
                                 ? Colors.red
-                                : Colors.deepPurple,
+                                : Theme.of(context).colorScheme.primary,
                             size: 35,
                             onPressed: () async {
                               _appViewModles.updateFavoriteState(_song);
@@ -212,8 +218,11 @@ class _NowPlayingState extends State<NowPlaying>
           bufferedBarColor: Colors.grey,
           progressBarColor: Colors.red,
           thumbColor: Colors.red,
-          timeLabelTextStyle: const TextStyle(
-              fontSize: 20, color: Colors.black, fontWeight: FontWeight.w600),
+          timeLabelTextStyle: TextStyle(
+            fontSize: 20,
+            color: Theme.of(context).colorScheme.secondary,
+            fontWeight: FontWeight.w600,
+          ),
         );
       },
     );
@@ -228,14 +237,12 @@ class _NowPlayingState extends State<NowPlaying>
           MediaIconButton(
             icon: Icons.skip_previous_rounded,
             size: 50,
-            color: Colors.deepPurple,
             onPressed: _setPreSong,
           ),
           _playButton(),
           MediaIconButton(
             icon: Icons.skip_next_rounded,
             size: 50,
-            color: Colors.deepPurple,
             onPressed: _setNextSong,
           ),
           _loodModeButtom(),
@@ -263,7 +270,6 @@ class _NowPlayingState extends State<NowPlaying>
         } else if (playing != true) {
           return MediaIconButton(
             icon: Icons.play_arrow_rounded,
-            color: Colors.deepPurple,
             size: 58,
             onPressed: () {
               _audioPlayerManager.player.play();
@@ -274,7 +280,6 @@ class _NowPlayingState extends State<NowPlaying>
           _playAnimation();
           return MediaIconButton(
             icon: Icons.pause,
-            color: Colors.deepPurple,
             size: 58,
             onPressed: () {
               _audioPlayerManager.player.pause();
@@ -288,7 +293,6 @@ class _NowPlayingState extends State<NowPlaying>
           }
           return MediaIconButton(
             icon: Icons.replay,
-            color: Colors.deepPurple,
             size: 58,
             onPressed: () {
               _audioPlayerManager.player.seek(Duration.zero, index: 0);
@@ -367,7 +371,7 @@ class _NowPlayingState extends State<NowPlaying>
   Color? _getSuffleIconColor() {
     return _appViewModles.isSuffle.value == true
         ? Colors.red
-        : Colors.deepPurple;
+        : Theme.of(context).colorScheme.primary;
   }
 
   StreamBuilder<LoopMode> _loodModeButtom() {
@@ -375,10 +379,10 @@ class _NowPlayingState extends State<NowPlaying>
       stream: _audioPlayerManager.player.loopModeStream,
       builder: (context, snapshot) {
         final loopMode = snapshot.data ?? LoopMode.off;
-        const icons = [
-          Icon(Icons.repeat, color: Colors.deepPurple),
-          Icon(Icons.repeat_one, color: Colors.red),
-          Icon(Icons.repeat, color: Colors.red),
+        final icons = [
+          Icon(Icons.repeat, color: Theme.of(context).colorScheme.primary),
+          const Icon(Icons.repeat_one, color: Colors.red),
+          const Icon(Icons.repeat, color: Colors.red),
         ];
         const cycleModes = [
           LoopMode.off,
