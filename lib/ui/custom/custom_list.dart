@@ -250,7 +250,6 @@ class _MyPageViewState extends State<MyPageView> {
         leading: MediaIconButton(
           icon: Icons.arrow_back,
           size: 40,
-          color: Theme.of(context).colorScheme.secondary,
           onPressed: () {
             Navigator.pop(context);
           },

@@ -43,6 +43,7 @@ dependencies:
   cloud_firestore: ^4.17.3
   share_plus: ^9.0.0
   just_audio_background: ^0.0.1-beta.12
+  collection: ^1.18.0
 
 dev_dependencies:
   flutter_test:

@@ -62,7 +62,6 @@ class _NowPlayingState extends State<NowPlaying>
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         leading: MediaIconButton(
           icon: Icons.arrow_back_rounded,
-          color: Theme.of(context).colorScheme.secondary,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -73,7 +72,6 @@ class _NowPlayingState extends State<NowPlaying>
         ),
         trailing: MediaIconButton(
           icon: Icons.more_horiz_rounded,
-          color: Theme.of(context).colorScheme.secondary,
           onPressed: () {
             showBottomSheetSong(context, _song);
           },
@@ -452,6 +450,7 @@ class _NowPlayingState extends State<NowPlaying>
   void showMessage(String content) {
     var snackBar = SnackBar(
       content: Text(content, style: Theme.of(context).textTheme.bodyMedium),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       duration: const Duration(seconds: 1),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -5,7 +5,7 @@ import 'package:music_app_flutter/ui/home/view_modles.dart';
 import '../../data/models/song.dart';
 import '../custom/custom_list.dart';
 import '../library/library_tab.dart';
-import '../search/search_tab.dart';
+import '../discovery/discovery_tab.dart';
 import '../setting/setting_tab.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -29,8 +29,14 @@ class _MyHomePageState extends State<MyHomePage> {
       child: CupertinoTabScaffold(
         tabBar: CupertinoTabBar(iconSize: 35, items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.album), label: 'Library'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_music),
+            label: 'Library',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.album_rounded),
+            label: 'Discovery',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Setting'),
         ]),
         tabBuilder: (context, index) {
@@ -147,7 +153,6 @@ Widget getGridView(MusicAppViewModles viewModles) {
     childrenDelegate: SliverChildBuilderDelegate(
       (context, index) {
         return SongGridView(
-          viewModles: viewModles,
           songList: viewModles.songList,
           song: viewModles.songList[index],
         );
@@ -158,12 +163,10 @@ Widget getGridView(MusicAppViewModles viewModles) {
 }
 
 class SongGridView extends StatefulWidget {
-  final MusicAppViewModles viewModles;
   final List<Song> songList;
   final Song song;
   const SongGridView({
     super.key,
-    required this.viewModles,
     required this.songList,
     required this.song,
   });

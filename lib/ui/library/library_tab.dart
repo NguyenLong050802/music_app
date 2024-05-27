@@ -34,7 +34,6 @@ class _LibraryTabState extends State<LibraryTab> {
           MediaIconButton(
             icon: Icons.add,
             size: 40,
-            color: Theme.of(context).colorScheme.secondary,
             onPressed: () {},
           ),
         ],
@@ -91,11 +90,3 @@ class _LibraryTabState extends State<LibraryTab> {
     );
   }
 }
-
-// void addNewList(String title) {
-//   final newList = ListSong(
-//     songList: [],
-//     title: title,
-//   );
-//   newList.songList.addAll()
-// }
