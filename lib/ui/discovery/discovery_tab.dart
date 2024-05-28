@@ -102,8 +102,27 @@ class _SearchTabState extends State<SearchTab> {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return GetViewAllAlbum(
-                          list: albumList, artistListAll: albumListAll);
+                      return GetViewAll(
+                          list: albumList,
+                          artistListAll: albumListAll,
+                          title: 'Albums',
+                          childrenDelegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return detailGrid(
+                                  context,
+                                  albumList,
+                                  index,
+                                  albumListAll,
+                                  albumList[index].album,
+                                  () => showGridAlbumsItem(
+                                        context,
+                                        albumList,
+                                        index,
+                                        albumListAll,
+                                      ));
+                            },
+                            childCount: albumList.length,
+                          ));
                     }));
                   },
                   child: Text(
@@ -128,8 +147,29 @@ class _SearchTabState extends State<SearchTab> {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return GetViewAllArtist(
-                          list: artistList, artistListAll: artistListAll);
+                      return GetViewAll(
+                        list: artistList,
+                        artistListAll: artistListAll,
+                        title: 'Artists',
+                        childrenDelegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return detailGrid(
+                              context,
+                              artistList,
+                              index,
+                              artistListAll,
+                              artistList[index].artist,
+                              () => showGridArtItem(
+                                context,
+                                artistList,
+                                index,
+                                artistListAll,
+                              ),
+                            );
+                          },
+                          childCount: artistList.length,
+                        ),
+                      );
                     }));
                   },
                   child: Text(
@@ -174,19 +214,12 @@ class _SearchTabState extends State<SearchTab> {
                 ],
               ),
             ),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return MyPageView(
-                  viewModles: _viewModles,
-                  list: albumListAll
-                      .where(
-                          (element) => element.album == songList[index].album)
-                      .toList(),
-                  image: songList[index].image,
-                  title: songList[index].album,
-                );
-              }));
-            },
+            onTap: () => showGridAlbumsItem(
+              context,
+              songList,
+              index,
+              albumListAll,
+            ),
           );
         },
         separatorBuilder: (context, index) {
@@ -225,19 +258,12 @@ class _SearchTabState extends State<SearchTab> {
                 ],
               ),
             ),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return MyPageView(
-                  viewModles: _viewModles,
-                  list: artistListAll
-                      .where(
-                          (element) => element.artist == (list[index].artist))
-                      .toList(),
-                  image: list[index].image,
-                  title: list[index].artist,
-                );
-              }));
-            },
+            onTap: () => showGridArtItem(
+              context,
+              list,
+              index,
+              artistListAll,
+            ),
           );
         },
         separatorBuilder: (context, index) {
@@ -248,13 +274,17 @@ class _SearchTabState extends State<SearchTab> {
   }
 }
 
-class GetViewAllArtist extends StatelessWidget {
+class GetViewAll extends StatelessWidget {
   final List<Song> list;
   final List<Song> artistListAll;
-  const GetViewAllArtist({
+  final String title;
+  final SliverChildDelegate childrenDelegate;
+  const GetViewAll({
     super.key,
     required this.list,
     required this.artistListAll,
+    required this.title,
+    required this.childrenDelegate,
   });
 
   @override
@@ -263,14 +293,13 @@ class GetViewAllArtist extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         leading: MediaIconButton(
           icon: Icons.arrow_back,
-          color: Theme.of(context).colorScheme.secondary,
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         middle: Text(
-          'Artists',
+          title,
           style: Theme.of(context).textTheme.titleMedium,
         ),
       ),
@@ -279,25 +308,23 @@ class GetViewAllArtist extends StatelessWidget {
           crossAxisCount: 3,
           mainAxisExtent: 200,
         ),
-        childrenDelegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return detailGridArt(context, list, index, artistListAll);
-          },
-          childCount: list.length,
-        ),
+        childrenDelegate: childrenDelegate,
       ),
     );
   }
 }
 
-Widget detailGridArt(
+Widget detailGrid(
   BuildContext context,
   List<Song> list,
   int index,
-  List<Song> artistListAll,
+  List<Song> listAll,
+  String title,
+  void Function()? onTap,
 ) {
   return Material(
     child: InkWell(
+      onTap: onTap,
       child: SizedBox(
         child: Column(
           children: [
@@ -310,7 +337,7 @@ Widget detailGridArt(
               height: 30,
               child: Center(
                 child: Text(
-                  list[index].artist,
+                  title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyMedium,
@@ -320,106 +347,42 @@ Widget detailGridArt(
           ],
         ),
       ),
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return MyPageView(
-            viewModles: MusicAppViewModles(),
-            list: artistListAll
-                .where((element) => element.artist == list[index].artist)
-                .toList(),
-            image: list[index].image,
-            title: list[index].artist,
-          );
-        }));
-      },
     ),
   );
 }
 
-class GetViewAllAlbum extends StatelessWidget {
-  final List<Song> list;
-  final List<Song> artistListAll;
-  const GetViewAllAlbum({
-    super.key,
-    required this.list,
-    required this.artistListAll,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        leading: MediaIconButton(
-          icon: Icons.arrow_back,
-          color: Theme.of(context).colorScheme.secondary,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        middle: Text(
-          'Albums',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-      ),
-      child: GridView.custom(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          mainAxisExtent: 200,
-        ),
-        childrenDelegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return detailGridAlb(context, list, index, artistListAll);
-          },
-          childCount: list.length,
-        ),
-      ),
-    );
-  }
-}
-
-Widget detailGridAlb(
+void showGridAlbumsItem(
   BuildContext context,
   List<Song> list,
   int index,
-  List<Song> album,
+  List<Song> listAll,
 ) {
-  return Material(
-    child: InkWell(
-      child: SizedBox(
-        child: Column(
-          children: [
-            Leading(
-              image: list[index].image,
-              height: 150,
-              width: 200,
-            ),
-            SizedBox(
-              height: 30,
-              child: Center(
-                child: Text(
-                  list[index].album,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return MyPageView(
-            viewModles: MusicAppViewModles(),
-            list: album
-                .where((element) => element.album == list[index].album)
-                .toList(),
-            image: list[index].image,
-            title: list[index].artist,
-          );
-        }));
-      },
-    ),
-  );
+  Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return MyPageView(
+      viewModles: MusicAppViewModles(),
+      list: listAll
+          .where((element) => element.album == list[index].album)
+          .toList(),
+      image: list[index].image,
+      title: list[index].album,
+    );
+  }));
+}
+
+void showGridArtItem(
+  BuildContext context,
+  List<Song> list,
+  int index,
+  List<Song> listAll,
+) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return MyPageView(
+      viewModles: MusicAppViewModles(),
+      list: listAll
+          .where((element) => element.artist == list[index].artist)
+          .toList(),
+      image: list[index].image,
+      title: list[index].artist,
+    );
+  }));
 }

@@ -1,7 +1,6 @@
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
-
 import '../../data/models/song.dart';
 
 class AudioPlayerManager {
