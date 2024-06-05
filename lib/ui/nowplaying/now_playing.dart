@@ -253,7 +253,7 @@ class _NowPlayingState extends State<NowPlaying>
   StreamBuilder<PlayerState> _playButton() {
     return StreamBuilder<PlayerState>(
       stream: _audioPlayerManager.player.playerStateStream,
-      builder: ((context, snapshot) {
+      builder: (context, snapshot) {
         final playerState = snapshot.data;
         final processingState = playerState?.processingState;
         final playing = playerState?.playing;
@@ -300,7 +300,7 @@ class _NowPlayingState extends State<NowPlaying>
             },
           );
         }
-      }),
+      },
     );
   }
 

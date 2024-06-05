@@ -147,19 +147,23 @@ class _HomeTabState extends State<HomeTab> {
 }
 
 Widget getGridView(MusicAppViewModles viewModles) {
-  return GridView.custom(
-    gridDelegate:
-        const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-    childrenDelegate: SliverChildBuilderDelegate(
-      (context, index) {
-        return SongGridView(
-          songList: viewModles.songList,
-          song: viewModles.songList[index],
+  return ListenableBuilder(
+      listenable: viewModles,
+      builder: (context, _) {
+        return GridView.custom(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3),
+          childrenDelegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return SongGridView(
+                songList: viewModles.songList,
+                song: viewModles.songList[index],
+              );
+            },
+            childCount: viewModles.songList.length,
+          ),
         );
-      },
-      childCount: viewModles.songList.length,
-    ),
-  );
+      });
 }
 
 class SongGridView extends StatefulWidget {

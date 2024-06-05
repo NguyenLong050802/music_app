@@ -54,7 +54,7 @@ class _SearchTabState extends State<SearchTab> {
         ),
         centerTitle: true,
       ),
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       body: showBody(_viewModles.songList, screenWith),
     );
   }

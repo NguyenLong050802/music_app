@@ -94,7 +94,7 @@ void showBottomSheetSong(BuildContext context, Song song) {
                   MyListTitle(
                     title: song.title,
                     onTap: () {},
-                    leading: Leading(image: song.image, height: 55, width: 55),
+                    leading: Leading(image: song.image, height: 60, width: 60),
                   ),
                   Divider(
                     thickness: 1,

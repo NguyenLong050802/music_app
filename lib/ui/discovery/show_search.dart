@@ -38,7 +38,8 @@ class ShowSearch extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     final searchResult = songList
         .where((element) =>
-            element.title.toLowerCase().contains(query.toLowerCase()))
+            element.title.toLowerCase().contains(query.toLowerCase()) ||
+            element.artist.toLowerCase().contains(query.toLowerCase()))
         .toList();
     return getBody(searchResult, musicAppViewModles);
   }
@@ -47,7 +48,8 @@ class ShowSearch extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     final searchResult = songList
         .where((element) =>
-            element.title.toLowerCase().contains(query.toLowerCase()))
+            element.title.toLowerCase().contains(query.toLowerCase()) ||
+            element.artist.toLowerCase().contains(query.toLowerCase()))
         .toList();
     return getBody(searchResult, musicAppViewModles);
   }
