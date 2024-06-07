@@ -3,6 +3,9 @@
 A Music Flayer App with FLutter.The app features a beautiful neumorphic UI design and provides a smooth user experience for playing music.
 
 ## ScreenShots
+![Screenshot 2024-06-07 195603](https://github.com/NguyenLong050802/music_app/assets/149816933/0d71ed72-f124-4840-9cb2-0535fc88a38a)
+![Screenshot 2024-06-07 195651](https://github.com/NguyenLong050802/music_app/assets/149816933/e33f4724-db53-490f-8129-5ca22e69bd02)
+
 ![Screenshot 2024-06-05 153838](https://github.com/NguyenLong050802/music_app/assets/149816933/9e62ea01-9b36-4e7b-994b-ad78b307cb9b)
 ![Screenshot 2024-06-05 153923](https://github.com/NguyenLong050802/music_app/assets/149816933/383e2efa-4e69-4921-8222-7c6802b2f87a)
 
