@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_app_flutter/ui/custom/custom_icon_buttom.dart';
-import 'package:music_app_flutter/ui/home/view_modles.dart';
+import 'package:music_app_flutter/ui/custom/custom_textfield.dart';
+import 'package:music_app_flutter/ui/view_modles.dart';
 import '../../data/models/song.dart';
 import '../nowplaying/now_playing.dart';
 
@@ -260,7 +261,7 @@ class _MyPageViewState extends State<MyPageView> {
         child: Column(
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.width * 0.6,
+              height: MediaQuery.of(context).size.width * 0.62,
               child: Column(
                 children: [
                   Center(
@@ -279,19 +280,11 @@ class _MyPageViewState extends State<MyPageView> {
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all(
-                          Theme.of(context).primaryColorLight),
-                      minimumSize: WidgetStateProperty.all(const Size(200, 40)),
-                    ),
+                  MyTextButton(
+                    title: 'Play All',
                     onPressed: () {
                       navigator(context, widget.list[0], widget.list);
                     },
-                    child: Text(
-                      'Play All',
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
                   ),
                 ],
               ),

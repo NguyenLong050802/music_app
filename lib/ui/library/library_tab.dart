@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:music_app_flutter/ui/custom/custom_icon_buttom.dart';
 import 'package:music_app_flutter/ui/custom/custom_list.dart';
-import 'package:music_app_flutter/ui/home/view_modles.dart';
+import 'package:music_app_flutter/ui/view_modles.dart';
 // import '../../data/models/song.dart';
 
 class LibraryTab extends StatefulWidget {

@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:music_app_flutter/firebase_options.dart';
+import 'ui/account/sign_in.dart';
 import 'ui/home/home_tab.dart';
-import 'ui/home/view_modles.dart';
+import 'ui/view_modles.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +39,7 @@ class MyApp extends StatelessWidget {
                 error: Colors.red,
                 onSecondary: Colors.black,
                 onSurface: Colors.black,
-                onError: Colors.white,
+                onError: Colors.black,
                 brightness: Brightness.light,
               ),
               useMaterial3: true,
@@ -58,13 +60,13 @@ class MyApp extends StatelessWidget {
             darkTheme: ThemeData(
               colorScheme: const ColorScheme(
                 primary: Colors.lightBlueAccent,
-                secondary: Colors.white70,
+                secondary: Colors.white,
                 onPrimary: Colors.lightBlue,
                 surface: Colors.black,
                 error: Colors.red,
                 onSecondary: Colors.white70,
                 onSurface: Colors.black,
-                onError: Colors.white,
+                onError: Colors.black,
                 brightness: Brightness.dark,
               ),
               useMaterial3: true,
@@ -97,7 +99,16 @@ class MyApp extends StatelessWidget {
                 ),
               ),
             ),
-            home: const MyHomePage(),
+            home: StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return const MyHomePage();
+                } else {
+                  return const SignInPage();
+                }
+              },
+            ),
           );
         });
   }

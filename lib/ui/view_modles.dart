@@ -16,17 +16,15 @@ class MusicAppViewModles extends ChangeNotifier {
   static final _musicViewModel = MusicAppViewModles._internal();
   factory MusicAppViewModles() => _musicViewModel;
   MusicAppViewModles._internal() {
-    firebaseService.loadSongFromFb('song').then((value) {
+    loadSong('song', songList);
+    loadSong('favoriteSong', favoriteList);
+  }
+
+  void loadSong(String collection , List<Song> list) {
+    firebaseService.loadSongFromFb(collection).then((value) {
       if (value is List<Song>) {
-        songList.clear();
-        songList.addAll(value);
-        notifyListeners();
-      }
-    });
-    firebaseService.loadSongFromFb('favoriteSong').then((value) {
-      if (value is List<Song>) {
-        favoriteList.clear();
-        favoriteList.addAll(value);
+        list.clear();
+        list.addAll(value);
         notifyListeners();
       }
     });
@@ -55,10 +53,6 @@ class MusicAppViewModles extends ChangeNotifier {
     await firebaseService.updateSongToFb(song, collection);
   }
 
-  Future updateAddedSongValue(Song song, String collection) async {
-    notifyListeners();
-    await firebaseService.updateAddedSongToFb(song, collection);
-  }
 
   void updateFavoriteState(Song song) {
     song.favorite.value = !song.favorite.value;
@@ -104,5 +98,4 @@ class MusicAppViewModles extends ChangeNotifier {
       await updateFavoriteSongValue(song, 'song');
     }
   }
-
 }

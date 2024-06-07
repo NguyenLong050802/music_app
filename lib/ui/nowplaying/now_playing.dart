@@ -4,10 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:music_app_flutter/ui/custom/custom_icon_buttom.dart';
-import 'package:music_app_flutter/ui/home/view_modles.dart';
+import 'package:music_app_flutter/ui/view_modles.dart';
 import 'package:music_app_flutter/ui/nowplaying/audio_player_manager.dart';
 import '../../data/models/song.dart';
 import '../custom/custom_list.dart';
+import '../custom/custom_textfield.dart';
 
 class NowPlaying extends StatefulWidget {
   final List<Song> songList;
@@ -447,15 +448,6 @@ class _NowPlayingState extends State<NowPlaying>
     _animationController.value = _currentAnimationPosition;
   }
 
-  void showMessage(String content) {
-    var snackBar = SnackBar(
-      content: Text(content, style: Theme.of(context).textTheme.bodyMedium),
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      duration: const Duration(seconds: 1),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   Future _shareSong() async {
     await _appViewModles.shareSong(_song);
   }
@@ -464,11 +456,11 @@ class _NowPlayingState extends State<NowPlaying>
     if (song.favorite.value == true) {
       await _appViewModles.addFavotiteSong(
           song, _appViewModles.favoriteList, 'favoriteSong');
-      showMessage('Added to favorites list successfully');
+      showMessage('Added to favorites list successfully', context);
     } else {
       await _appViewModles.deleteSongNotFavorite(
           song, _appViewModles.favoriteList, 'favoriteSong');
-      showMessage('Removed to favorites list successfully');
+      showMessage('Removed to favorites list successfully', context);
     }
     await _appViewModles.updateFavoriteSongValue(song, 'song');
   }

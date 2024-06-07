@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../data/models/song.dart';
 
 class FireBaseService {
@@ -22,12 +20,6 @@ class FireBaseService {
         .doc(song.id).update({'favorite': song.favorite.value});
   }
 
-    Future<void> updateAddedSongToFb(Song song ,String collection ) async {
-    await FirebaseFirestore.instance
-        .collection(collection)
-        .doc(song.id).update({'isAdded': song.isAdded.value});
-  }
-
   Future loadSongFromFb(String collection) async {
     final querySnapshot =
         await FirebaseFirestore.instance.collection(collection).get();
@@ -39,4 +31,17 @@ class FireBaseService {
     }
   }
 
+    Future addUser(String userId, Map<String, dynamic> userInfoMap) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .set(userInfoMap);
+  }
+
+  Future updateUser(String userId, Map<String, dynamic> userInfoMap) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .update(userInfoMap);
+  }
 }

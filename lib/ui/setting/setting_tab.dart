@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:music_app_flutter/ui/custom/custom_list.dart';
-import '../home/view_modles.dart';
+import '../view_modles.dart';
 
 class SettingTab extends StatefulWidget {
   const SettingTab({super.key});
